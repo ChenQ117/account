@@ -18,5 +18,8 @@ public interface ConnectionDao{
     void deleteConnection(Connection...connections);
     @Query("SELECT * FROM Connection ORDER BY ID")
     LiveData<List<Connection>> getAllConnectionLive();
-
+    @Query("DELETE FROM CONNECTION WHERE event_id IN (:eventid)")
+    void deleteConnectionByEventId(int...eventid);
+    @Query("DELETE FROM CONNECTION WHERE person_Id IN (:personid)")
+    void deleteConnectionByPersonId(int ... personid);
 }

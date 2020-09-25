@@ -12,7 +12,7 @@ public class Person {
     @ColumnInfo(name = "name")
     private String name;//姓名
     @ColumnInfo(name = "money")
-    private int money;//这个人与我的金额关系
+    private int money;//这个人与我的金额总关系
 
     public Person(String name,int money) {
         this.name = name;
