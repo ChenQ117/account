@@ -24,7 +24,15 @@ public class PersonRepository {
         mPersonDao = personDatabase.getPersonDao();
         allPersonsLive = mPersonDao.getAllPersonLive();
     }
-
+    void insertPerson(Person...people){
+        new InsertAsyncTask(mPersonDao).doInBackground(people);
+    }
+    void updatePerson(Person...people){
+        new UpdateAsyncTask(mPersonDao).doInBackground(people);
+    }
+    void deletePerson(Person...people){
+        new DeleteAsyncTask(mPersonDao).doInBackground(people);
+    }
     static class InsertAsyncTask extends AsyncTask<Person,Void,Void>{
         private PersonDao mPersonDao;
         public InsertAsyncTask(PersonDao personDao){
@@ -47,17 +55,6 @@ public class PersonRepository {
             return null;
         }
     }
-    static class UpdatePersonMoneyAsyncTask extends AsyncTask<Person,Void,Void>{
-        private PersonDao mPersonDao;
-        public UpdatePersonMoneyAsyncTask(PersonDao personDao){
-            mPersonDao = personDao;
-        }
-
-        @Override
-        protected Void doInBackground(Person... people) {
-            return null;
-        }
-    }
     static class DeleteAsyncTask extends AsyncTask<Person,Void,Void>{
         private PersonDao mPersonDao;
         public DeleteAsyncTask(PersonDao personDao){
@@ -65,8 +62,9 @@ public class PersonRepository {
         }
         @Override
         protected Void doInBackground(Person... people) {
-            mPersonDao.insertPerson(people);
+            mPersonDao.deletePerson(people);
             return null;
         }
     }
+
 }

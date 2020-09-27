@@ -22,7 +22,7 @@ public interface PersonDao {
     @Query("DELETE FROM PERSON WHERE NAME in (:names)")
     void deletePersonByName(String...names);
     @Query("SELECT money FROM Person WHERE NAME= (:name)")
-    int findPersonMoney(String name);
+    int findPersonMoney(int... name);
     @Query("SELECT * FROM PERSON ORDER BY ID")
     LiveData<List<Person>> getAllPersonLive();
 
