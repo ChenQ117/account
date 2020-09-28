@@ -25,7 +25,7 @@ public class EventRepository {
         allEventLive = mEventDao.getAllEventLive();
     }
     public void insertEvent(Event...events){
-        new InsertAsyncTask(mEventDao).doInBackground(events);
+        new InsertAsyncTask(mEventDao).execute(events);
     }
     static class InsertAsyncTask extends AsyncTask<Event,Void,Void>{
         private EventDao mEventDao;

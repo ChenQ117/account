@@ -25,13 +25,13 @@ public class PersonRepository {
         allPersonsLive = mPersonDao.getAllPersonLive();
     }
     void insertPerson(Person...people){
-        new InsertAsyncTask(mPersonDao).doInBackground(people);
+        new InsertAsyncTask(mPersonDao).execute(people);
     }
     void updatePerson(Person...people){
-        new UpdateAsyncTask(mPersonDao).doInBackground(people);
+        new UpdateAsyncTask(mPersonDao).execute(people);
     }
     void deletePerson(Person...people){
-        new DeleteAsyncTask(mPersonDao).doInBackground(people);
+        new DeleteAsyncTask(mPersonDao).execute(people);
     }
     static class InsertAsyncTask extends AsyncTask<Person,Void,Void>{
         private PersonDao mPersonDao;
