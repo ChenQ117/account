@@ -17,6 +17,16 @@ public class Event {
     private int count;//人数
     @ColumnInfo(name = "amount")
     private int amount;//消费金额
+    @ColumnInfo(name = "IsEmpty")
+    private boolean isEmpty;//是否付清
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public void setEmpty(boolean empty) {
+        isEmpty = empty;
+    }
 
     public Event(String activity, String time, int count, int amount) {
         this.activity = activity;

@@ -14,7 +14,7 @@ public class Connection {
     private int id;
     @ColumnInfo(name = "event_id")
     private int eventId;//活动id
-    @ColumnInfo(name = "personId")
+    @ColumnInfo(name = "person_Id")
     private int personId;//人名id
     @ColumnInfo(name = "singlemoney")
     private int singlemoney;//单笔活动的消费金额
