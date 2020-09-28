@@ -1,6 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_button_01"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="624dp"
+        android:background="#F67"
+        android:gravity="center"
+        android:text="活动与金额"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_button_02" />
+
+    <TextView
+        android:id="@+id/tv_button_02"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="624dp"
+        android:background="#A67"
+        android:gravity="center"
+        android:text="谁付钱"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@+id/tv_button_01"
+        app:layout_constraintRight_toLeftOf="@+id/tv_button_03" />
+
+    <TextView
+        android:id="@+id/tv_button_03"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="624dp"
+        android:background="#767"
+        android:gravity="center"
+        android:text="为谁付钱"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintLeft_toRightOf="@id/tv_button_02"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="409dp"
+        android:layout_height="37dp"
+        android:background="#3F51B5"
+        android:text="下一步"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="672dp" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar1"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/tv_button_01"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:gravity="center"
+            android:text="活动与金额"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="563dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="107dp">
+
+        <EditText
+            android:id="@+id/edit_input1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入账单金额" />
+
+        <EditText
+            android:id="@+id/edit_input2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="活动内容"
+            app:layout_constraintTop_toBottomOf="@+id/edit_input1"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <EditText
+            android:id="@+id/edit_input3"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:hint="总人数"
+            app:layout_constraintTop_toBottomOf="@+id/edit_input2"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="104dp"
+            app:layout_constraintStart_toEndOf="@+id/edit_input3"
+            tools:layout_editor_absoluteY="90dp"
+            android:text="确定"
+            android:id="@+id/button_input_people1"
+            android:textColor="#FFFFFF"
+            android:background="#3F51B5"/>
+
+        <ScrollView
+            android:layout_width="407dp"
+            android:layout_height="421dp"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="141dp"
+            android:id="@+id/s1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/My_input_people_layout"
+                android:orientation="vertical">
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
