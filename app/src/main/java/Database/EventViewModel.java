@@ -10,11 +10,23 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class EventViewModel extends AndroidViewModel {
-    private LiveData<List<Event>> allEventLive;
+
     private EventRepository mEventRepository;
+    public LiveData<List<Event>> getAllEventLive(){
+        return mEventRepository.getAllEventLive();
+    }
     public EventViewModel(@NonNull Application application) {
         super(application);
+        mEventRepository = new EventRepository(application);
     }
-
+    void insertEvent(Event...events){
+        mEventRepository.insertEvent(events);
+    }
+    void deleteEvent(Event...events){
+        mEventRepository.deleteEvent(events);
+    }
+    void updateEvent(Event...events){
+        mEventRepository.updateEvent(events);
+    }
 
 }

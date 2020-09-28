@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class PersonRepository {
-    private  int a;
     private LiveData<List<Person>> allPersonsLive;
     private PersonDao mPersonDao;
 

@@ -27,6 +27,13 @@ public class EventRepository {
     public void insertEvent(Event...events){
         new InsertAsyncTask(mEventDao).execute(events);
     }
+    public void deleteEvent(Event...events){
+        new DeleteAsyncTask(mEventDao).execute(events);
+    }
+    public void updateEvent(Event...events){
+        new UpdateAsyncTask(mEventDao).execute(events);
+    }
+
     static class InsertAsyncTask extends AsyncTask<Event,Void,Void>{
         private EventDao mEventDao;
         public InsertAsyncTask(EventDao eventDao) {
