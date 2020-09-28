@@ -10,7 +10,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class EventViewModel extends AndroidViewModel {
-
+private  int a;
     private EventRepository mEventRepository;
     public LiveData<List<Event>> getAllEventLive(){
         return mEventRepository.getAllEventLive();
