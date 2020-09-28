@@ -19,7 +19,8 @@
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/ttv_button_02" />
+        app:layout_constraintRight_toLeftOf="@+id/ttv_button_02"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
 
     <TextView
         android:id="@+id/ttv_button_02"
@@ -33,7 +34,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/ttv_button_01"
-        app:layout_constraintRight_toLeftOf="@+id/ttv_button_03" />
+        app:layout_constraintRight_toLeftOf="@+id/ttv_button_03"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
 
     <TextView
         android:id="@+id/ttv_button_03"
@@ -47,19 +49,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/ttv_button_02"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar1" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="409dp"
         android:layout_height="37dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="22dp"
         android:background="#3F51B5"
         android:text="下一步"
         android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="672dp" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        tools:ignore="MissingConstraints" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar1"
@@ -88,6 +94,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="409dp"
         android:layout_height="563dp"
         tools:ignore="MissingConstraints"
@@ -99,8 +106,10 @@
             android:id="@+id/s2"
             android:layout_width="412dp"
             android:layout_height="566dp"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="1dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/My_who_pay_layout"

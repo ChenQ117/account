@@ -2,7 +2,9 @@ package com.example.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.Window;
 
 public class Main2Activity extends AppCompatActivity {
 
