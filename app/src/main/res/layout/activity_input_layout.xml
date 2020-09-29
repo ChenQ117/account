@@ -9,13 +9,12 @@
     <TextView
         android:id="@+id/tv_button_01"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="624dp"
+        android:layout_height="0dp"
         android:background="#F67"
         android:gravity="center"
         android:text="活动与金额"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,13 +24,12 @@
     <TextView
         android:id="@+id/tv_button_02"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="624dp"
+        android:layout_height="0dp"
         android:background="#A67"
         android:gravity="center"
         android:text="谁付钱"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@+id/tv_button_01"
         app:layout_constraintRight_toLeftOf="@+id/tv_button_03"
@@ -40,13 +38,12 @@
     <TextView
         android:id="@+id/tv_button_03"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="624dp"
+        android:layout_height="0dp"
         android:background="#767"
         android:gravity="center"
         android:text="为谁付钱"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintLeft_toRightOf="@id/tv_button_02"
         app:layout_constraintRight_toRightOf="parent"
@@ -70,7 +67,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar1"
         android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_height="0dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -95,16 +92,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="409dp"
-        android:layout_height="563dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="107dp">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        tools:ignore="MissingConstraints">
 
         <EditText
             android:id="@+id/edit_input1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:hint="输入账单金额"
             app:layout_constraintBottom_toTopOf="@+id/edit_input2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,7 +113,7 @@
         <EditText
             android:id="@+id/edit_input2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:hint="活动内容"
             app:layout_constraintBottom_toTopOf="@+id/edit_input3"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,11 +123,11 @@
         <EditText
             android:id="@+id/edit_input3"
             android:layout_width="200dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
             android:layout_marginEnd="104dp"
             android:layout_marginBottom="1dp"
             android:hint="总人数"
-            app:layout_constraintBottom_toTopOf="@+id/s1"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toStartOf="@+id/button_input_people1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_input2" />
@@ -142,6 +141,7 @@
             android:text="确定"
             android:textColor="#FFFFFF"
             app:layout_constraintStart_toEndOf="@+id/edit_input3"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
             tools:layout_editor_absoluteY="90dp" />
 
         <ScrollView
@@ -150,8 +150,9 @@
             android:layout_height="421dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_input3">
+            app:layout_constraintTop_toBottomOf="@+id/guideline2">
 
             <LinearLayout
                 android:id="@+id/My_input_people_layout"
@@ -161,7 +162,21 @@
 
         </ScrollView>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
