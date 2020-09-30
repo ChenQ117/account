@@ -11,7 +11,7 @@ public abstract class ConnectionDatabase extends RoomDatabase {
     private static ConnectionDatabase INSTENCE;
     static synchronized ConnectionDatabase getConnectionDatabase(Context context){
         if (INSTENCE ==null){
-            INSTENCE = Room.databaseBuilder(context,ConnectionDatabase.class,"connection_database")
+            INSTENCE = Room.databaseBuilder(context.getApplicationContext(),ConnectionDatabase.class,"connection_database")
                     .allowMainThreadQueries()
                     .build();
         }

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
  * 第三张表，用来连接活动和人
  * 根据活动id找到参与的人或者根据人的id找到对应的活动
  */
-@Entity
+@Entity(tableName = "connection_database")
 public class Connection {
     @PrimaryKey(autoGenerate = true)
     private int id;

@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.List;
-@Entity
+@Entity(tableName = "person_database")
 public class Person {
     @PrimaryKey(autoGenerate = true)
     private int id;

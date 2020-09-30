@@ -4,8 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
-@Entity
+@Entity(tableName = "event_database")
 public class Event {
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -27,6 +26,8 @@ public class Event {
     public void setEmpty(boolean empty) {
         isEmpty = empty;
     }
+
+
 
     public Event(String activity, int count, int amount) {
         this.activity = activity;

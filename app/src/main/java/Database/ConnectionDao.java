@@ -16,10 +16,10 @@ public interface ConnectionDao{
     void updateConnection(Connection...connections);
     @Delete
     void deleteConnection(Connection...connections);
-    @Query("SELECT * FROM Connection ORDER BY ID")
+    @Query("SELECT * FROM connection_database ORDER BY ID")
     LiveData<List<Connection>> getAllConnectionLive();
-    @Query("DELETE FROM CONNECTION WHERE event_id IN (:eventid)")
+    @Query("DELETE FROM connection_database WHERE event_id IN (:eventid)")
     void deleteConnectionByEventId(int...eventid);
-    @Query("DELETE FROM CONNECTION WHERE person_Id IN (:personid)")
+    @Query("DELETE FROM connection_database WHERE person_Id IN (:personid)")
     void deleteConnectionByPersonId(int ... personid);
 }

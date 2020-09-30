@@ -17,6 +17,6 @@ public interface EventDao {
     void updateEvent(Event...events);
     @Delete
     void deleteEvent(Event...events);
-    @Query("SELECT * FROM Event ORDER BY ID")
+    @Query("SELECT * FROM EVENT_DATABASE ORDER BY ID")
     LiveData<List<Event>> getAllEventLive();
 }
