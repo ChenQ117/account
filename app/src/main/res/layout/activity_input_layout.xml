@@ -96,9 +96,21 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline"
         tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="账单金额："
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/edit_input2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/edit_input1"
@@ -107,8 +119,19 @@
             android:hint="输入账单金额"
             app:layout_constraintBottom_toTopOf="@+id/edit_input2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="活动内容："
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/edit_input3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <EditText
             android:id="@+id/edit_input2"
@@ -117,32 +140,43 @@
             android:hint="活动内容"
             app:layout_constraintBottom_toTopOf="@+id/edit_input3"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/edit_input1" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="参与人数："
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <EditText
             android:id="@+id/edit_input3"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="104dp"
-            android:layout_marginBottom="1dp"
             android:hint="总人数"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toStartOf="@+id/button_input_people1"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
             app:layout_constraintTop_toBottomOf="@+id/edit_input2" />
 
         <Button
             android:id="@+id/button_input_people1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="104dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="1dp"
             android:background="#3F51B5"
             android:text="确定"
             android:textColor="#FFFFFF"
-            app:layout_constraintStart_toEndOf="@+id/edit_input3"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
-            tools:layout_editor_absoluteY="90dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/edit_input3"
+            app:layout_constraintTop_toBottomOf="@+id/edit_input2" />
 
         <ScrollView
             android:id="@+id/s1"
