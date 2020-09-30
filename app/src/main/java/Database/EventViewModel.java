@@ -19,13 +19,13 @@ private  int a;
         super(application);
         mEventRepository = new EventRepository(application);
     }
-    void insertEvent(Event...events){
+    public void insertEvent(Event...events){
         mEventRepository.insertEvent(events);
     }
-    void deleteEvent(Event...events){
+    public void deleteEvent(Event...events){
         mEventRepository.deleteEvent(events);
     }
-    void updateEvent(Event...events){
+    public void updateEvent(Event...events){
         mEventRepository.updateEvent(events);
     }
 

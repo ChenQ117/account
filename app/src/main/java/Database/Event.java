@@ -28,9 +28,8 @@ public class Event {
         isEmpty = empty;
     }
 
-    public Event(String activity, String time, int count, int amount) {
+    public Event(String activity, int count, int amount) {
         this.activity = activity;
-        this.time = time;
         this.count = count;
         this.amount = amount;
     }

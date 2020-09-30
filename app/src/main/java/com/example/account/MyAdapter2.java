@@ -22,7 +22,6 @@ public class MyAdapter2 extends RecyclerView.Adapter<MyAdapter2.MyViewHolder> {
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //从文件中要把它加载这个view
         LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
-        //View itemview=layoutInflater.inflate(R.layout.cell_normal,parent,false);
         View itemview=layoutInflater.inflate(R.layout.cell_card,parent,false);
 
         return new MyViewHolder(itemview);
