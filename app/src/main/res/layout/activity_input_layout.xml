@@ -74,10 +74,9 @@
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/tv_button_01"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -116,7 +115,7 @@
             android:id="@+id/edit_input1"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:hint="输入账单金额"
+            android:hint="请输入账单金额"
             app:layout_constraintBottom_toTopOf="@+id/edit_input2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView"
@@ -137,7 +136,7 @@
             android:id="@+id/edit_input2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:hint="活动内容"
+            android:hint="请输入活动内容"
             app:layout_constraintBottom_toTopOf="@+id/edit_input3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
@@ -158,7 +157,7 @@
             android:id="@+id/edit_input3"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:hint="总人数"
+            android:hint="请输入参与人数"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toStartOf="@+id/button_input_people1"
             app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -168,8 +167,6 @@
             android:id="@+id/button_input_people1"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="1dp"
             android:background="#3F51B5"
             android:text="确定"
             android:textColor="#FFFFFF"
