@@ -19,7 +19,8 @@ public class Item_Input extends AppCompatActivity {
     EditText editinput_02;//输入活动内容的Edit
     EditText editinput_03;//输入总人数的Edit
     Button button_input_people_01;//确定总人数
-    int people_num;
+    Button button1;
+    int people_num=0;
     LinearLayout my_input_layout;//添加人名的布局
     ArrayList<EditText> edit4;//记录人名
     EditText editText1;//新建Edit
@@ -36,8 +37,16 @@ public class Item_Input extends AppCompatActivity {
         button_input_people_01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                people_num=Integer.parseInt(editinput_03.getText().toString());
-                addView();//根据人数添加Edit框，输入人名
+                if(people_num==0){
+                    people_num = Integer.parseInt(editinput_03.getText().toString());
+                    addView();//根据人数添加Edit框，输入人名
+                }else {
+                    deleteView();
+                    people_num = Integer.parseInt(editinput_03.getText().toString());
+                    addView();//根据人数添加Edit框，输入人名
+                }
+
+
             }
         });
     }
@@ -57,5 +66,17 @@ public class Item_Input extends AppCompatActivity {
             my_input_layout.addView(editText1);
         }
     }
+    public void deleteView() {
+        while (people_num!=0){
+            EditText editText = edit4.get(people_num-1);
+            my_input_layout.removeView(editText);
+            edit4.remove(people_num-1);
+
+            people_num--;
+        }
+
+
+    }
+
 
 }

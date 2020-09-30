@@ -149,8 +149,8 @@
 
         <Button
             android:id="@+id/button_input_people1"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="140dp"
+            android:layout_height="45dp"
             android:background="#3F51B5"
             android:text="确定"
             android:textColor="#FFFFFF"
