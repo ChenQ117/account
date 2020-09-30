@@ -14,6 +14,7 @@ import com.example.account.R;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,6 +25,10 @@ import Database.Event;
 import Database.EventDao;
 import Database.EventDatabase;
 import Database.EventViewModel;
+import Database.Person;
+import Database.PersonDao;
+import Database.PersonDatabase;
+import Database.PersonViewModel;
 
 public class Item_Input extends AppCompatActivity {
     EditText editinput_01;//输入账单金额的Edit
@@ -32,6 +37,9 @@ public class Item_Input extends AppCompatActivity {
     EventViewModel mEventViewModel;
     EventDatabase mEventDatabase;
     EventDao mEventDao;
+    PersonViewModel mPersonViewModel;
+    PersonDatabase mPersonDatabase;
+    PersonDao mPersonDao;
     Button button_input_people_01;//确定总人数
     Button button1;
     int people_num=0;
@@ -52,6 +60,9 @@ public class Item_Input extends AppCompatActivity {
         mEventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
         mEventDatabase = Room.databaseBuilder(this,EventDatabase.class,"event_database").build();
         mEventDao = mEventDatabase.getEventDao();
+        mPersonViewModel = ViewModelProviders.of(this).get(PersonViewModel.class);
+        mPersonDatabase = Room.databaseBuilder(this,PersonDatabase.class,"person_database").build();
+        mPersonDao = mPersonDatabase.getPersonDao();
         button_input_people_01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,12 +97,28 @@ public class Item_Input extends AppCompatActivity {
         if(flag == 2 ||"".equals(activityname)||"".equals(counts)||"".equals(moneys)){
             Toast.makeText(this,"信息未填写完整",Toast.LENGTH_SHORT).show();
         }else {
+            //设置消费活动表
             int count = Integer.parseInt(counts);
             int money = Integer.parseInt(moneys);
             Event event = new Event(activityname,count,money );
             mEventViewModel.insertEvent(event);
-            System.out.println(event.getId()+"--------------------------");
 
+            //设置人表
+            String[] personname = new String[edit4.size()];
+            for(int i=0;i<edit4.size();i++){
+                personname[i] =  edit4.get(i).getText().toString().trim();
+            }
+            List<Person> personList = mPersonDao.findPerson(personname);
+            for (int i=0;i<personname.length;i++){
+                if(!personList.contains(personname[i])){
+                    Person person = new Person(personname[i],0);
+                    mPersonViewModel.insertPerson(person);
+                }
+            }
+
+            //设置参加记录表
+            //int event_id = mEventDao.getPrimaryKey();
+            //System.out.println(event_id+"----------------------");
         }
     }
     public void addView(){
