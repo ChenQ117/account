@@ -42,9 +42,8 @@ public class Item_Input extends AppCompatActivity {
         });
     }
     public void addView(){
-
+        my_input_layout=findViewById(R.id.My_input_people_layout);
         for(int i=0;i<people_num;i++){
-            my_input_layout=findViewById(R.id.My_input_people_layout);
             editText1 = new EditText(this);
             Log.d(TAG, "addView: -----------"+editText1.toString());
             editText1.setHint("人名");
@@ -53,7 +52,7 @@ public class Item_Input extends AppCompatActivity {
             editText1.setTop(10);
             editText1.setSingleLine(true);
             editText1.setEllipsize(TextUtils.TruncateAt.valueOf("END"));
-            edit4.add(people_num,editText1);
+            edit4.add(i,editText1);
             Log.d(TAG, "addView: -----------"+people_num);
             my_input_layout.addView(editText1);
         }
