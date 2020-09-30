@@ -27,5 +27,7 @@ public interface PersonDao {
     List<Person>findPerson(String ... name);
     @Query("SELECT * FROM person_database ORDER BY ID")
     LiveData<List<Person>> getAllPersonLive();
+    @Query("SELECT last_insert_rowid()")
+    int getPrimaryKey();
 
 }
