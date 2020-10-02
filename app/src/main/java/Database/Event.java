@@ -2,11 +2,13 @@ package Database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "event_database")
 public class Event {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private int id;
     @ColumnInfo(name = "activity")
     private String activity;//活动名称
@@ -27,8 +29,21 @@ public class Event {
         isEmpty = empty;
     }
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", activity='" + activity + '\'' +
+                ", time='" + time + '\'' +
+                ", count=" + count +
+                ", amount=" + amount +
+                ", isEmpty=" + isEmpty +
+                '}';
+    }
 
-
+    public Event() {
+    }
+    @Ignore
     public Event(String activity, int count, int amount) {
         this.activity = activity;
         this.count = count;

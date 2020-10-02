@@ -12,6 +12,11 @@ import java.util.List;
 public class EventViewModel extends AndroidViewModel {
     private EventRepository mEventRepository;
     private EventDao mEventDao;
+
+    public EventDao getEventDao() {
+        return mEventDao;
+    }
+
     public LiveData<List<Event>> getAllEventLive(){
         return mEventRepository.getAllEventLive();
     }

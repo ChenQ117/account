@@ -1,5 +1,6 @@
-package com.example.account;
+package Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,9 +12,7 @@ import android.widget.Toast;
 
 import com.example.account.R;
 
-import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +47,7 @@ public class Item_Input extends AppCompatActivity {
     ConnectionDao mConnectionDao;
     Button button_input_people_01;//确定总人数
     Button nextbutton1;
+    int event_id;
     int people_num=0;
     LinearLayout my_input_layout;//添加人名的布局
     ArrayList<EditText> edit4;//记录人名
@@ -57,6 +57,7 @@ public class Item_Input extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_layout);
+        ActivityCollector.addActivity(this);
         editinput_01=findViewById(R.id.edit_input1);
         editinput_02=findViewById(R.id.edit_input2);
         editinput_03=findViewById(R.id.edit_input3);
@@ -73,19 +74,23 @@ public class Item_Input extends AppCompatActivity {
         mConnectionViewModel = ViewModelProviders.of(this).get(ConnectionViewModel.class);
         mConnectionDatabase = Room.databaseBuilder(this,ConnectionDatabase.class,"connection_database.db").build();
         mConnectionDao = mConnectionDatabase.getConnectionDao();
+
+
+        /*mConnectionDatabase.beginTransaction();
+        mEventDatabase.beginTransaction();
+        mPersonDatabase.beginTransaction();*/
+
         button_input_people_01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(people_num==0){
-                    people_num = Integer.parseInt(editinput_03.getText().toString());
+                    people_num = Integer.parseInt(editinput_03.getText().toString().trim());
                     addView();//根据人数添加Edit框，输入人名
                 }else {
                     deleteView();
                     people_num = Integer.parseInt(editinput_03.getText().toString());
                     addView();//根据人数添加Edit框，输入人名
                 }
-
-
             }
         });
         nextbutton1.setOnClickListener(new View.OnClickListener() {
@@ -106,45 +111,43 @@ public class Item_Input extends AppCompatActivity {
                 }
                 if(flag == 2 ||"".equals(activityname)||"".equals(counts)||"".equals(moneys)){
                     Toast.makeText(v.getContext(),"信息未填写完整",Toast.LENGTH_SHORT).show();
+
                 }else {
                     //设置消费活动表
                     int count = Integer.parseInt(counts);
                     int money = Integer.parseInt(moneys);
                     Event event = new Event(activityname,count,money );
                     mEventViewModel.insertEvent(event);
-                    //设置人表
+
+                    //设置人表 设置参加记录表
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             String[] personname = new String[edit4.size()];
+                            List<Event> eventList = mEventDao.getAllEvent();
+                            int index = eventList.size()-1;
+                            event_id = eventList.get(index).getId();
                             for(int i=0;i<edit4.size();i++){
                                 personname[i] =  edit4.get(i).getText().toString().trim();
                             }
-                            List<Person> personList = mPersonDao.findPerson(personname);
+                            List<Person> personList = mPersonDao.findPerson();
                             for (int i=0;i<personname.length;i++){
                                 if(!personList.contains(personname[i])){
                                     Person person = new Person(personname[i],0);
                                     mPersonViewModel.insertPerson(person);
+                                    personList.add(person);
+                                    int person_id = personList.get(i).getId();
+                                    Connection connection = new Connection(event_id,person_id);
+                                    mConnectionViewModel.insertConnection(connection);
                                 }
                             }
-
-                        }
-                    }).start();
-
-                    //设置参加记录表
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int event_id = mEventDao.getPrimaryKey();
-                            for(int i=0;i<edit4.size();i++){
-                                int person_id = mPersonDao.getPrimaryKey()+i;
-                                Connection connection = new Connection(event_id,person_id);
-                                mConnectionViewModel.insertConnection(connection);
-                            }
                         }
                     }).start();
 
 
+                    Intent intent = new Intent(v.getContext(),Who_Pay.class);
+                    intent.putExtra("event_id",event_id);
+                    startActivity(intent);
                 }
             }
         });
@@ -173,6 +176,9 @@ public class Item_Input extends AppCompatActivity {
             people_num--;
         }
     }
-
+    protected void onDestroy(){
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 
 }

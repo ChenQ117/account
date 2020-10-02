@@ -9,22 +9,23 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Person.class},version = 2,exportSchema = false)
+@Database(entities = {Person.class},version = 3,exportSchema = false)
 public abstract class PersonDatabase extends RoomDatabase {
     public abstract PersonDao getPersonDao();
     private static PersonDatabase INSTANCE;
     static synchronized PersonDatabase getPersonDatabase(Context context){
         if(INSTANCE == null){
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),PersonDatabase.class,"person_database.db")
+                    .addMigrations(MIGRATION2_3)
                     .build();
         }
         return INSTANCE;
     }
-//    static final Migration MIGRATION1_2 = new Migration(1,2) {
-//        @Override
-//        public void migrate(@NonNull SupportSQLiteDatabase database) {
-//            database.execSQL("DROP TABLE person_database");
-//        }
-//    };
+    static final Migration MIGRATION2_3 = new Migration(2,3) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE person_database.db ADD COLUMN ispay INTEGER NOT NULL DEFAULT 0");
+        }
+    };
 
 }

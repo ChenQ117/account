@@ -19,6 +19,6 @@ public interface EventDao {
     void deleteEvent(Event...events);
     @Query("SELECT * FROM EVENT_DATABASE ORDER BY ID")
     LiveData<List<Event>> getAllEventLive();
-    @Query("SELECT last_insert_rowid()")
-    int getPrimaryKey();
+    @Query("SELECT * FROM EVENT_DATABASE ORDER BY ID")
+    List<Event> getAllEvent();
 }

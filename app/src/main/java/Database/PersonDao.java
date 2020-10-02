@@ -15,19 +15,15 @@ public interface PersonDao {
     void insertPerson(Person...person);
     @Update
     void updatePerson(Person...person);
-    @Query("UPDATE person_database SET money = (:money) WHERE name = (:name)")
-    void updatePersonMoney(int money,String name);
     @Delete
     void deletePerson(Person...person);
-    @Query("DELETE FROM person_database WHERE NAME in (:names)")
-    void deletePersonByName(String...names);
-    @Query("SELECT money FROM person_database WHERE NAME= (:name)")
-    List<Integer> findPersonMoney(String ... name);
     @Query("SELECT * FROM person_database WHERE NAME= (:name)")
-    List<Person>findPerson(String ... name);
+    Person findPersonMoney(String ... name);
+    @Query("SELECT * FROM person_database")
+    List<Person> findPerson();
+    @Query("SELECT * FROM person_database WHERE id IN (:id)")
+    List<Person> findPersonById(List<Integer> id);
     @Query("SELECT * FROM person_database ORDER BY ID")
     LiveData<List<Person>> getAllPersonLive();
-    @Query("SELECT last_insert_rowid()")
-    int getPrimaryKey();
 
 }

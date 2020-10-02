@@ -1,5 +1,6 @@
 package com.example.account;
 
+import Activity.Item_Input;
 import Activity.Mine_Money;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton floatingActionButton = findViewById(R.id.fab);
     }
     public void onClickfab(View view){
-        Intent intent = new Intent(this,Item_Input.class);
+        Intent intent = new Intent(this, Item_Input.class);
         startActivity(intent);
     }
     public boolean onCreateOptionsMenu(Menu menu) {

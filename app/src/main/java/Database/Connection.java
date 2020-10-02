@@ -2,6 +2,7 @@ package Database;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
@@ -11,6 +12,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "connection_database")
 public class Connection {
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private int id;
     @ColumnInfo(name = "event_id")
     private int eventId;//活动id
@@ -18,6 +20,9 @@ public class Connection {
     private int personId;//人名id
     @ColumnInfo(name = "singlemoney")
     private int singlemoney;//单笔活动的消费金额
+
+    public Connection() {
+    }
 
     public int getId() {
         return id;
@@ -34,7 +39,7 @@ public class Connection {
     public void setSinglemoney(int singlemoney) {
         this.singlemoney = singlemoney;
     }
-
+    @Ignore
     public Connection(int eventId, int personId) {
         this.eventId = eventId;
         this.personId = personId;

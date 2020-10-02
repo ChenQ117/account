@@ -102,7 +102,7 @@
         tools:ignore="MissingConstraints">
 
 
-        <ScrollView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/s2"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -117,9 +117,11 @@
                 android:id="@+id/My_who_pay_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
 
-        </ScrollView>
+            </LinearLayout>
+
+        </>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

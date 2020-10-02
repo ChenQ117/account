@@ -7,11 +7,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonViewModel extends AndroidViewModel {
     public PersonDao mPersonDao;
     public PersonRepository mPersonRepository;
+    public PersonDao getPersonDao() {
+        return mPersonDao;
+    }
+
     public LiveData<List<Person>> getAllPersonLive(){
         return mPersonRepository.getAllPersonsLive();
     }

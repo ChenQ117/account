@@ -15,6 +15,11 @@ public class ConnectionViewModel extends AndroidViewModel {
     public LiveData<List<Connection>> getAllConnectionLive(){
         return mConnectionDao.getAllConnectionLive();
     }
+
+    public ConnectionDao getConnectionDao() {
+        return mConnectionDao;
+    }
+
     public ConnectionViewModel(@NonNull Application application) {
         super(application);
         mConnectionRepository = new ConnectionRepository(application);

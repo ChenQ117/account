@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectionRepository {
@@ -34,6 +35,8 @@ public class ConnectionRepository {
     void updateConnection (Connection...connections){
         new UpdateAsyncTask(mConnectionDao).execute(connections);
     }
+
+
     static class InsertAsyncTask extends AsyncTask<Connection,Void,Void>{
         private ConnectionDao mConnectionDao;
         public InsertAsyncTask(ConnectionDao connectionDao){

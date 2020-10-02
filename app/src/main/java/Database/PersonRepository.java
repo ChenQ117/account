@@ -27,6 +27,9 @@ public class PersonRepository {
     void insertPerson(Person...people){
         new InsertAsyncTask(mPersonDao).execute(people);
     }
+    void findPerson(){
+
+    }
     void updatePerson(Person...people){
         new UpdateAsyncTask(mPersonDao).execute(people);
     }

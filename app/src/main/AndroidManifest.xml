@@ -21,7 +21,7 @@
         <activity android:name="Activity.Detail"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         </activity>
-        <activity android:name=".Item_Input"
+        <activity android:name="Activity.Item_Input"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         </activity>
         <activity android:name=".Main2Activity"
