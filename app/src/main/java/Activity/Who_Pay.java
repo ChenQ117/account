@@ -69,6 +69,7 @@ public class Who_Pay extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.s2);
 
 
+
         Intent intent = getIntent();
         event_id = intent.getIntExtra("event_id",0);
         new Thread(new Runnable() {
@@ -137,7 +138,6 @@ public class Who_Pay extends AppCompatActivity {
         });
 
     }
-
 
 
 }
