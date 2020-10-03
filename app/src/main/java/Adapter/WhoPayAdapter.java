@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 import Database.Person;
 
 public class WhoPayAdapter extends RecyclerView.Adapter<WhoPayAdapter.MyViewHoder> {
-    Map<CheckBox,EditText> mCheckBoxEditTextMap = new HashMap<>();
+    Map<CheckBox,EditText> mCheckBoxEditTextMap;
     List<Person> mPeople;
 
     public WhoPayAdapter(Map<CheckBox, EditText> checkBoxEditTextMap, List<Person> people) {
@@ -38,14 +39,20 @@ public class WhoPayAdapter extends RecyclerView.Adapter<WhoPayAdapter.MyViewHode
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHoder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHoder holder, int position) {
         Person person = mPeople.get(position);
         holder.mCheckBox.setText(person.getName());
-        if(holder.mCheckBox.isChecked()){
-            holder.mEditText.setVisibility(View.VISIBLE);
-        }else {
-            holder.mEditText.setVisibility(View.GONE);
-        }
+        holder.mEditText.setVisibility(View.GONE);
+        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    holder.mEditText.setVisibility(View.VISIBLE);
+                }else {
+                    holder.mEditText.setVisibility(View.GONE);
+                }
+            }
+        });
         mCheckBoxEditTextMap.put(holder.mCheckBox,holder.mEditText);
     }
 

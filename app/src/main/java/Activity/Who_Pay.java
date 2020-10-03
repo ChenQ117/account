@@ -79,11 +79,9 @@ public class Who_Pay extends AppCompatActivity {
             @Override
             public void run() {
                 //获得参与这项活动的人的id
-                List<Integer> personList = new ArrayList<>();
-                personList = mConnectionDao.findConnectionByEventId(event_id);
+                List<Integer> personList = mConnectionDao.findConnectionByEventId(event_id);
 
                 //获得参与这项活动的人的所有信息
-                person = new ArrayList<>();
                 person = mPersonDao.findPersonById(personList);
                 mWhoPayAdapter = new WhoPayAdapter(mCheckBoxEditTextMap,person);
                 runOnUiThread(new Runnable() {
@@ -103,21 +101,27 @@ public class Who_Pay extends AppCompatActivity {
             public void onClick(View v) {
                 Set<CheckBox> checkBoxes = mCheckBoxEditTextMap.keySet();
                 int flag = 0;//用于判断金额是否填写不合理
-                for(CheckBox checkBox: checkBoxes){
+                for(final CheckBox checkBox: checkBoxes){
                     if(checkBox.isChecked()){
 
-                        String moneys = mCheckBoxEditTextMap.get(checkBox).getText().toString().trim();
+                        final String moneys = mCheckBoxEditTextMap.get(checkBox).getText().toString().trim();
                         if("".equals(moneys)){
                             flag = 1;
                             Toast.makeText(v.getContext(),"金额填写错误",Toast.LENGTH_SHORT).show();
                         }else {
-                            int money = Integer.parseInt(moneys);
-                            Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
-                            Connection connection = new Connection(event_id,person.getId());
-                            connection.setSinglemoney(money);
-                            mConnectionViewModel.updateConnection(connection);
-                            person.setMoney(person.getMoney()+money);
-                            mPersonViewModel.updatePerson(person);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int money = Integer.parseInt(moneys);
+                                    Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
+                                    Connection connection = new Connection(event_id,person.getId());
+                                    connection.setSinglemoney(money);
+                                    mConnectionViewModel.updateConnection(connection);
+                                    person.setMoney(person.getMoney()+money);
+                                    mPersonViewModel.updatePerson(person);
+                                }
+                            }).start();
+
                         }
 
                     }

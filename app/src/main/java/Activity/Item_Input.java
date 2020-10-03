@@ -131,19 +131,25 @@ public class Item_Input extends AppCompatActivity {
                                 personname[i] =  edit4.get(i).getText().toString().trim();
                             }
                             List<Person> personList = mPersonDao.findPerson();
+                            List<String> personNameList = mPersonDao.findPersonName();
+
+                            int person_id = 0;
+                            if (!personList.isEmpty()){
+                                person_id = personList.get(personList.size()-1).getId();
+                            }
                             for (int i=0;i<personname.length;i++){
-                                if(!personList.contains(personname[i])){
+                                if(!personNameList.contains(personname[i])){
                                     Person person = new Person(personname[i],0);
                                     mPersonViewModel.insertPerson(person);
                                     personList.add(person);
-                                    int person_id = personList.get(i).getId();
+                                    personNameList.add(personname[i]);
+                                    person_id ++;
                                     Connection connection = new Connection(event_id,person_id);
                                     mConnectionViewModel.insertConnection(connection);
                                 }
                             }
                             Intent intent = new Intent(v.getContext(),Who_Pay.class);
                             intent.putExtra("event_id",event_id);
-                            System.out.println(event_id+"-----------------------------");
                             startActivity(intent);
                         }
                     }).start();

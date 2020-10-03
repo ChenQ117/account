@@ -21,6 +21,8 @@ public interface PersonDao {
     Person findPersonMoney(String ... name);
     @Query("SELECT * FROM person_database")
     List<Person> findPerson();
+    @Query("SELECT name FROM person_database")
+    List<String> findPersonName();
     @Query("SELECT * FROM person_database WHERE id IN (:id)")
     List<Person> findPersonById(List<Integer> id);
     @Query("SELECT * FROM person_database ORDER BY ID")
