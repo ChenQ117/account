@@ -95,7 +95,7 @@ public class Item_Input extends AppCompatActivity {
         });
         nextbutton1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 editinput_01 = findViewById(R.id.edit_input1);
                 editinput_02 = findViewById(R.id.edit_input2);
                 editinput_03 = findViewById(R.id.edit_input3);
@@ -141,13 +141,15 @@ public class Item_Input extends AppCompatActivity {
                                     mConnectionViewModel.insertConnection(connection);
                                 }
                             }
+                            Intent intent = new Intent(v.getContext(),Who_Pay.class);
+                            intent.putExtra("event_id",event_id);
+                            System.out.println(event_id+"-----------------------------");
+                            startActivity(intent);
                         }
                     }).start();
 
 
-                    Intent intent = new Intent(v.getContext(),Who_Pay.class);
-                    intent.putExtra("event_id",event_id);
-                    startActivity(intent);
+
                 }
             }
         });

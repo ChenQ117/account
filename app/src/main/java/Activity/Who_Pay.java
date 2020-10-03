@@ -17,6 +17,7 @@ import com.example.account.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import Adapter.WhoPayAdapter;
 import Database.Connection;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
@@ -46,6 +48,7 @@ public class Who_Pay extends AppCompatActivity {
     ConnectionViewModel mConnectionViewModel;
     ConnectionDao mConnectionDao;
     RecyclerView mRecyclerView;
+    WhoPayAdapter mWhoPayAdapter;
 
     Button nextButton;
     EditText ed;
@@ -67,10 +70,11 @@ public class Who_Pay extends AppCompatActivity {
 
         nextButton = findViewById(R.id.button2);
         mRecyclerView = findViewById(R.id.s2);
-
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Intent intent = getIntent();
         event_id = intent.getIntExtra("event_id",0);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -81,28 +85,18 @@ public class Who_Pay extends AppCompatActivity {
                 //获得参与这项活动的人的所有信息
                 person = new ArrayList<>();
                 person = mPersonDao.findPersonById(personList);
+                mWhoPayAdapter = new WhoPayAdapter(mCheckBoxEditTextMap,person);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRecyclerView.setAdapter(mWhoPayAdapter);
+                    }
+                });
+
 
             }
         }).start();
 
-
-
-
-        for(int i=0;i<person.size();i++){
-            LayoutInflater layoutInflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = layoutInflater.inflate(R.layout.select_who_pay,null,false);
-            cb = view.findViewById(R.id.checkBox);
-            ed = view.findViewById(R.id.edit_money);
-            LinearLayout linearLayout = findViewById(R.id.My_who_pay_layout);
-            cb.setText(person.get(i).getName());
-            if (cb.isChecked()){
-                ed.setVisibility(View.VISIBLE);
-            }else {
-                ed.setVisibility(View.GONE);
-            }
-            mCheckBoxEditTextMap.put(cb,ed);
-            linearLayout.addView(view);
-        }
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override

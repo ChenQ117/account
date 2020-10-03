@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.account.R;
@@ -20,6 +22,12 @@ import Database.Person;
 
 public class WhoPayAdapter extends RecyclerView.Adapter<WhoPayAdapter.MyViewHoder> {
     Map<CheckBox,EditText> mCheckBoxEditTextMap = new HashMap<>();
+    List<Person> mPeople;
+
+    public WhoPayAdapter(Map<CheckBox, EditText> checkBoxEditTextMap, List<Person> people) {
+        mCheckBoxEditTextMap = checkBoxEditTextMap;
+        mPeople = people;
+    }
 
     @NonNull
     @Override
@@ -31,11 +39,19 @@ public class WhoPayAdapter extends RecyclerView.Adapter<WhoPayAdapter.MyViewHode
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHoder holder, int position) {
+        Person person = mPeople.get(position);
+        holder.mCheckBox.setText(person.getName());
+        if(holder.mCheckBox.isChecked()){
+            holder.mEditText.setVisibility(View.VISIBLE);
+        }else {
+            holder.mEditText.setVisibility(View.GONE);
+        }
+        mCheckBoxEditTextMap.put(holder.mCheckBox,holder.mEditText);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mPeople.size();
     }
     static class MyViewHoder extends RecyclerView.ViewHolder{
         CheckBox mCheckBox;
