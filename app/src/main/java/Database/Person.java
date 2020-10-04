@@ -6,6 +6,8 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.List;
+import java.util.Objects;
+
 @Entity(tableName = "person_database")
 public class Person {
     @PrimaryKey(autoGenerate = true)
@@ -42,6 +44,17 @@ public class Person {
                 ", money=" + money +
                 ", isPay=" + isPay +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        String personName = (String) o;
+        return name.equals(personName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, money, isPay);
     }
 
     public int getId() {

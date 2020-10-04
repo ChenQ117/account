@@ -53,12 +53,12 @@
         android:id="@+id/button2"
         android:layout_width="0dp"
         android:layout_height="37dp"
-        android:layout_marginBottom="22dp"
         android:background="#3F51B5"
         android:text="完成"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -90,13 +90,15 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/s2"
-        android:layout_width="0dp"
+        android:layout_width="400dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/button2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline4" />
+        app:layout_constraintTop_toTopOf="@id/guideline4"
+        app:layout_constraintVertical_bias="1.0"
+        />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -110,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1504788" />
+        app:layout_constraintGuide_percent="0.15" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

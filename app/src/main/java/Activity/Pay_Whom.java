@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import Adapter.WhoPayAdapter;
+import Adapter.PayAdapter;
 import Database.Connection;
 import Database.ConnectionDao;
 import Database.ConnectionViewModel;
@@ -38,7 +38,7 @@ public class Pay_Whom extends AppCompatActivity {
     ConnectionViewModel mConnectionViewModel;
     ConnectionDao mConnectionDao;
     RecyclerView mRecyclerView;
-    WhoPayAdapter mWhoPayAdapter;
+    PayAdapter mPayAdapter;
 
     Button nextButton;
     EditText ed;
@@ -74,11 +74,11 @@ public class Pay_Whom extends AppCompatActivity {
 
                 //获得参与这项活动的人的所有信息
                 person = mPersonDao.findPersonById(personList);
-                mWhoPayAdapter = new WhoPayAdapter(mCheckBoxEditTextMap,person);
+                mPayAdapter = new PayAdapter(mCheckBoxEditTextMap,person);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mRecyclerView.setAdapter(mWhoPayAdapter);
+                        mRecyclerView.setAdapter(mPayAdapter);
                     }
                 });
 

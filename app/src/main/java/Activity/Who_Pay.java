@@ -1,16 +1,11 @@
 package Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.account.R;
@@ -21,13 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import Adapter.WhoPayAdapter;
+import Adapter.PayAdapter;
 import Database.Connection;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
@@ -42,13 +36,16 @@ import Database.PersonViewModel;
 
 public class Who_Pay extends AppCompatActivity {
     EventViewModel mEventViewModel;
+    EventDatabase mEventDatabase;
     EventDao mEventDao;
     PersonViewModel mPersonViewModel;
+    PersonDatabase mPersonDatabase;
     PersonDao mPersonDao;
     ConnectionViewModel mConnectionViewModel;
+    ConnectionDatabase mConnectionDatabase;
     ConnectionDao mConnectionDao;
     RecyclerView mRecyclerView;
-    WhoPayAdapter mWhoPayAdapter;
+    PayAdapter mPayAdapter;
 
     Button nextButton;
     EditText ed;
@@ -61,12 +58,16 @@ public class Who_Pay extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.who_pay_layout);
         ActivityCollector.addActivity(this);
+
         mEventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
-        mEventDao = mEventViewModel.getEventDao();
+        mEventDatabase = Room.databaseBuilder(this, EventDatabase.class,"event_database.db").build();
+        mEventDao = mEventDatabase.getEventDao();
         mPersonViewModel = ViewModelProviders.of(this).get(PersonViewModel.class);
-        mPersonDao = mPersonViewModel.getPersonDao();
+        mPersonDatabase = Room.databaseBuilder(this, PersonDatabase.class,"person_database.db").build();
+        mPersonDao = mPersonDatabase.getPersonDao();
         mConnectionViewModel = ViewModelProviders.of(this).get(ConnectionViewModel.class);
-        mConnectionDao = mConnectionViewModel.getConnectionDao();
+        mConnectionDatabase = Room.databaseBuilder(this, ConnectionDatabase.class,"connection_database.db").build();
+        mConnectionDao = mConnectionDatabase.getConnectionDao();
 
         nextButton = findViewById(R.id.button2);
         mRecyclerView = findViewById(R.id.s2);
@@ -84,11 +85,11 @@ public class Who_Pay extends AppCompatActivity {
 
                 //获得参与这项活动的人的所有信息
                 person = mPersonDao.findPersonById(personList);
-                mWhoPayAdapter = new WhoPayAdapter(mCheckBoxEditTextMap,person);
+                mPayAdapter = new PayAdapter(mCheckBoxEditTextMap,person);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mRecyclerView.setAdapter(mWhoPayAdapter);
+                        mRecyclerView.setAdapter(mPayAdapter);
                     }
                 });
 
@@ -117,9 +118,13 @@ public class Who_Pay extends AppCompatActivity {
                                     Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
                                     Connection connection = new Connection(event_id,person.getId());
                                     connection.setSinglemoney(money);
-                                    mConnectionViewModel.updateConnection(connection);
+                                    mConnectionDao.updateConnection(connection);
+//                                    mConnectionViewModel.updateConnection(connection);
                                     person.setMoney(person.getMoney()+money);
-                                    mPersonViewModel.updatePerson(person);
+                                    mPersonDao.updatePerson(person);
+//                                    mPersonViewModel.updatePerson(person);
+
+
                                 }
                             }).start();
 

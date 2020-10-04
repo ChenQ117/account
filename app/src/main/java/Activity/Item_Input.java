@@ -78,9 +78,6 @@ public class Item_Input extends AppCompatActivity {
         mConnectionDao = mConnectionDatabase.getConnectionDao();
 
 
-        /*mConnectionDatabase.beginTransaction();
-        mEventDatabase.beginTransaction();
-        mPersonDatabase.beginTransaction();*/
 
         button_input_people_01.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,9 +98,9 @@ public class Item_Input extends AppCompatActivity {
                 editinput_01 = findViewById(R.id.edit_input1);
                 editinput_02 = findViewById(R.id.edit_input2);
                 editinput_03 = findViewById(R.id.edit_input3);
-                String activityname = editinput_02.getText().toString().trim();
-                String counts = editinput_03.getText().toString().trim();
-                String moneys = editinput_01.getText().toString().trim();
+                final String activityname = editinput_02.getText().toString().trim();
+                final String counts = editinput_03.getText().toString().trim();
+                final String moneys = editinput_01.getText().toString().trim();
                 int flag = 1;//用于判断人名是否为空
                 for(EditText edit:edit4){
                     if("".equals(edit.getText().toString().trim())){
@@ -115,20 +112,26 @@ public class Item_Input extends AppCompatActivity {
                     Toast.makeText(v.getContext(),"信息未填写完整",Toast.LENGTH_SHORT).show();
 
                 }else {
+
+
                     //设置消费活动表
-                    int count = Integer.parseInt(counts);
-                    int money = Integer.parseInt(moneys);
-                    Event event = new Event(activityname,count,money );
-                    mEventViewModel.insertEvent(event);
+
 
                     //设置人表 设置参加记录表
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+
+                            int count = Integer.parseInt(counts);
+                            int money = Integer.parseInt(moneys);
+                            Event event = new Event(activityname,count,money );
+                            mEventDao.insertEvent(event);
+
                             String[] personname = new String[edit4.size()];
                             List<Event> eventList = mEventDao.getAllEvent();
                             int index = eventList.size()-1;
                             event_id = eventList.get(index).getId();
+
                             for(int i=0;i<edit4.size();i++){
                                 personname[i] =  edit4.get(i).getText().toString().trim();
                             }
@@ -139,17 +142,34 @@ public class Item_Input extends AppCompatActivity {
                             if (!personList.isEmpty()){
                                 person_id = personList.get(personList.size()-1).getId();
                             }
-                            for (int i=0;i<personname.length;i++){
-                                if(!personNameList.contains(personname[i])){
+
+                            for (int i = 0;i<personname.length;i++){
+                                /*if (personList.isEmpty()){
                                     Person person = new Person(personname[i],0);
                                     mPersonViewModel.insertPerson(person);
+                                    personList.add(person);
+                                    person_id++;
+                                    Connection connection = new Connection(event_id,person_id);
+                                    mConnectionViewModel.insertConnection(connection);
+                                }*/
+                                if (!personNameList.contains(personname[i])){
+                                    Person person = new Person(personname[i],0);
+                                    mPersonDao.insertPerson(person);
+//                                    mPersonViewModel.insertPerson(person);
                                     personList.add(person);
                                     personNameList.add(personname[i]);
                                     person_id ++;
                                     Connection connection = new Connection(event_id,person_id);
-                                    mConnectionViewModel.insertConnection(connection);
+                                    mConnectionDao.insertConnection(connection);
+//                                    mConnectionViewModel.insertConnection(connection);
+                                }else {
+                                    Person person = mPersonDao.findPersonByName(personname[i]);
+                                    Connection connection = new Connection(event_id,person.getId());
+                                    mConnectionDao.insertConnection(connection);
+//                                    mConnectionViewModel.insertConnection(connection);
                                 }
                             }
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
