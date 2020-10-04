@@ -128,14 +128,16 @@ public class Who_Pay extends AppCompatActivity {
                     }
                 }
                 if(flag == 0){
-                    Intent intent1 = new Intent(v.getContext(),Pay_Whom.class);
-                    intent1.putExtra("event_id",event_id);
-                    startActivity(intent1);
+                    Toast.makeText(Who_Pay.this,"添加成功",Toast.LENGTH_SHORT).show();
+                    ActivityCollector.finishAll();
                 }
             }
         });
 
     }
-
+    protected void onDestroy(){
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 
 }

@@ -1,5 +1,6 @@
 package Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import com.example.account.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.room.Room;
@@ -148,14 +150,32 @@ public class Item_Input extends AppCompatActivity {
                                     mConnectionViewModel.insertConnection(connection);
                                 }
                             }
-                            Intent intent = new Intent(v.getContext(),Who_Pay.class);
-                            intent.putExtra("event_id",event_id);
-                            startActivity(intent);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(Item_Input.this);
+                                    builder.setTitle("您是否付钱");
+                                    builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(v.getContext(),Pay_Whom.class);
+                                            intent.putExtra("event_id",event_id);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(v.getContext(),Who_Pay.class);
+                                            intent.putExtra("event_id",event_id);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    builder.show();
+                                }
+                            });
                         }
                     }).start();
-
-
-
                 }
             }
         });
