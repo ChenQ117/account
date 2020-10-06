@@ -32,8 +32,6 @@
                 android:background="#7fab96c5"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/AlertDialog.AppCompat.Light"/>
-
-
 <!--            <androidx.recyclerview.widget.RecyclerView-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="match_parent" />-->
