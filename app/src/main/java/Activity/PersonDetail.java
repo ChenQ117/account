@@ -2,6 +2,8 @@ package Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +50,7 @@ public class PersonDetail extends AppCompatActivity {
     PersonInEventAdapter mPersonInEventAdapter;
 
     TextView tv_eventName;//活动名称
+    Button mButton;//完成
 
     List<Integer> person_idlist;
     List<Person> mPeople;
@@ -75,6 +78,13 @@ public class PersonDetail extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         tv_eventName = findViewById(R.id.eventName);
+        mButton = findViewById(R.id.button_end_detail);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PersonDetail.this.finish();
+            }
+        });
         //设置页面中的活动名称，通过数据库获取参与该项活动的所有人对象
         new Thread(new Runnable() {
             @Override

@@ -85,10 +85,16 @@ public class PersonInEventAdapter extends RecyclerView.Adapter<PersonInEventAdap
                             connection.setPay(false);
                             person.setMoney(person.getMoney()+connection.getSinglemoney());
                         }
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mConnectionDao.updateConnection(connection);
+                                mPersonDao.updatePerson(person);
+                            }
+                        }).start();
                     }
                 });
-                mConnectionDao.updateConnection(connection);
-                mPersonDao.updatePerson(person);
+
             }
         }).start();
 
