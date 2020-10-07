@@ -30,7 +30,7 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.MyViewHoder> {
     @Override
     public MyViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater =  LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.select_who_pay2,null,false);
+        View view = layoutInflater.inflate(R.layout.select_who_pay2,parent,false);
         return new MyViewHoder(view);
     }
 

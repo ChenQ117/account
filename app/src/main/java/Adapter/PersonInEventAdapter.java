@@ -52,7 +52,7 @@ public class PersonInEventAdapter extends RecyclerView.Adapter<PersonInEventAdap
     @Override
     public MyViewHoder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.name_layout, null, false);
+        View view = inflater.inflate(R.layout.name_layout, parent, false);
         return new MyViewHoder(view);
     }
 
