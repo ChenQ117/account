@@ -105,11 +105,11 @@ public class Pay_Whom extends AppCompatActivity {
                                 public void run() {
                                     int money = Integer.parseInt(moneys);
                                     Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
-                                    Connection connection = new Connection(event_id,person.getId());
+                                    Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event_id,person.getId());
                                     connection.setSinglemoney(-money);
-                                    mConnectionViewModel.updateConnection(connection);
+                                    mConnectionDao.updateConnection(connection);
                                     person.setMoney(person.getMoney()-money);
-                                    mPersonViewModel.updatePerson(person);
+                                    mPersonDao.updatePerson(person);
                                 }
                             }).start();
 
