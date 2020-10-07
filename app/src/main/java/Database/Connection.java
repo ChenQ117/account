@@ -67,6 +67,13 @@ public class Connection {
         singlemoney = 0;
     }
 
+    @Ignore
+    public Connection(int eventId, int personId, int singlemoney) {
+        this.eventId = eventId;
+        this.personId = personId;
+        this.singlemoney = singlemoney;
+    }
+
     public int getEventId() {
         return eventId;
     }

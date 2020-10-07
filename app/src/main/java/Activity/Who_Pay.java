@@ -116,13 +116,11 @@ public class Who_Pay extends AppCompatActivity {
                                 public void run() {
                                     int money = Integer.parseInt(moneys);
                                     Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
-                                    Connection connection = new Connection(event_id,person.getId());
+                                    Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event_id,person.getId());
                                     connection.setSinglemoney(money);
                                     mConnectionDao.updateConnection(connection);
-//                                    mConnectionViewModel.updateConnection(connection);
                                     person.setMoney(person.getMoney()+money);
                                     mPersonDao.updatePerson(person);
-//                                    mPersonViewModel.updatePerson(person);
                                 }
                             }).start();
 
