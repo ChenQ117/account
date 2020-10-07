@@ -33,6 +33,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
+/**
+ * 主活动，页面为多个活动条，点击每个活动条的活动名称可以查看活动详情页面
+ * layout：activity_main
+ * Adapter:EventAdapter
+ */
 public class MainActivity extends AppCompatActivity {
     EventViewModel mEventViewModel;
     EventDatabase mEventDatabase;
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     EventAdapter mEventAdapter;
     RecyclerView mRecyclerView;
+    List<Event> events;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,18 +75,13 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<Event> events = mEventDao.getAllEvent();
-                mEventAdapter = new EventAdapter(events,MainActivity.this);
+                events = mEventDao.getAllEvent();
+                mEventAdapter = new EventAdapter(events,MainActivity.this,mConnectionDao,mPersonDao);
                runOnUiThread(new Runnable() {
                    @Override
                    public void run() {
                        mRecyclerView.setAdapter(mEventAdapter);
-                   }
-               });
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       mEventViewModel.getAllEventLive().observe(MainActivity.this, new Observer<List<Event>>() {
+                       /*mEventDao.getAllEventLive().observe(MainActivity.this, new Observer<List<Event>>() {
                            @Override
                            public void onChanged(List<Event> events) {
                                int temp = mEventAdapter.getItemCount();
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                                    mEventAdapter.notifyDataSetChanged();
                                }
                            }
-                       });
+                       });*/
                    }
                });
 
@@ -100,6 +101,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mEventAdapter != null){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    events = mEventDao.getAllEvent();
+                    mEventAdapter = new EventAdapter(events,MainActivity.this,mConnectionDao,mPersonDao);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRecyclerView.setAdapter(mEventAdapter);
+                        }
+                    });
+                }
+            }).start();
+        }
+    }
+
     public void onClickfab(View view){
         Intent intent = new Intent(this, Item_Input.class);
         startActivity(intent);

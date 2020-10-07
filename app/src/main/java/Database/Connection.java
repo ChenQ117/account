@@ -20,8 +20,29 @@ public class Connection {
     private int personId;//人名id
     @ColumnInfo(name = "singlemoney")
     private int singlemoney;//单笔活动的消费金额
+    @ColumnInfo(name = "isPay")
+    private boolean isPay;//是否付清
 
     public Connection() {
+    }
+
+    public boolean isPay() {
+        return isPay;
+    }
+
+    @Override
+    public String toString() {
+        return "Connection{" +
+                "id=" + id +
+                ", eventId=" + eventId +
+                ", personId=" + personId +
+                ", singlemoney=" + singlemoney +
+                ", isPay=" + isPay +
+                '}';
+    }
+
+    public void setPay(boolean pay) {
+        isPay = pay;
     }
 
     public int getId() {
@@ -43,6 +64,7 @@ public class Connection {
     public Connection(int eventId, int personId) {
         this.eventId = eventId;
         this.personId = personId;
+        singlemoney = 0;
     }
 
     public int getEventId() {

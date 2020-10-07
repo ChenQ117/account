@@ -1,5 +1,6 @@
 package Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.account.R;
@@ -12,19 +13,23 @@ import androidx.room.Room;
 
 import java.util.List;
 
-import Adapter.PersonAdapter;
+import Adapter.EventInPersonAdapter;
+import Adapter.PersonInEventAdapter;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
 import Database.ConnectionViewModel;
+import Database.Event;
 import Database.EventDao;
 import Database.EventDatabase;
 import Database.EventViewModel;
-import Database.Person;
 import Database.PersonDao;
 import Database.PersonDatabase;
 import Database.PersonViewModel;
 
-public class Mine_Money extends AppCompatActivity {
+/**
+ * 活动详情页面，显示活动总金额与参与人
+ */
+public class EventDetail extends AppCompatActivity {
     EventViewModel mEventViewModel;
     EventDatabase mEventDatabase;
     EventDao mEventDao;
@@ -36,13 +41,19 @@ public class Mine_Money extends AppCompatActivity {
     ConnectionDao mConnectionDao;
 
     RecyclerView mRecyclerView;
-    PersonAdapter mPersonAdapter;
+    EventInPersonAdapter mEventInPersonAdapter;
 
-    List<Person> personList;
+    List<Integer> eventIdList;
+    List<Event> mEvents;
+
+    int person_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mine_layout);
+        setContentView(R.layout.detail_layout);
+        Intent intent =getIntent();
+        person_id = intent.getIntExtra("person_id",0);
+
 
         mEventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
         mEventDatabase = Room.databaseBuilder(this, EventDatabase.class,"event_database.db").build();
@@ -54,41 +65,45 @@ public class Mine_Money extends AppCompatActivity {
         mConnectionDatabase = Room.databaseBuilder(this, ConnectionDatabase.class,"connection_database.db").build();
         mConnectionDao = mConnectionDatabase.getConnectionDao();
 
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        mRecyclerView = findViewById(R.id.s3);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         new Thread(new Runnable() {
             @Override
             public void run() {
-                personList = mPersonDao.findPerson();
-                mPersonAdapter = new PersonAdapter(personList,Mine_Money.this);
+                eventIdList = mConnectionDao.findEventIdByPersonId(person_id);
+                mEvents = mEventDao.findEventByEventId(eventIdList);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mRecyclerView.setAdapter(mPersonAdapter);
+                        mEventInPersonAdapter = new EventInPersonAdapter(mConnectionDao,mPersonDao,mEventDao,
+                                eventIdList,mEvents,person_id);
+                        mRecyclerView.setAdapter(mEventInPersonAdapter);
                     }
                 });
             }
         }).start();
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(personList!=null){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    personList = mPersonDao.findPerson();
-                    mPersonAdapter = new PersonAdapter(personList,Mine_Money.this);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRecyclerView.setAdapter(mPersonAdapter);
-                        }
-                    });
-                }
-            }).start();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                eventIdList = mConnectionDao.findEventIdByPersonId(person_id);
+                mEvents = mEventDao.findEventByEventId(eventIdList);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mEventInPersonAdapter = new EventInPersonAdapter(mConnectionDao,mPersonDao,mEventDao,
+                                eventIdList,mEvents,person_id);
+                        mRecyclerView.setAdapter(mEventInPersonAdapter);
+                    }
+                });
+            }
+        }).start();
     }
 }

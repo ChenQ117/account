@@ -21,4 +21,10 @@ public interface EventDao {
     LiveData<List<Event>> getAllEventLive();
     @Query("SELECT * FROM EVENT_DATABASE ORDER BY ID")
     List<Event> getAllEvent();
+
+    @Query("SELECT * FROM EVENT_DATABASE where id in(:eventId)")
+    List<Event> findEventByEventId(List<Integer> eventId);
+
+    @Query("SELECT * FROM EVENT_DATABASE where id in(:eventId)")
+    Event findEventByEventId(int eventId);
 }

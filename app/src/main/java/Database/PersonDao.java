@@ -27,6 +27,10 @@ public interface PersonDao {
     List<String> findPersonName();
     @Query("SELECT * FROM person_database WHERE id IN (:id)")
     List<Person> findPersonById(List<Integer> id);
+
+    @Query("SELECT * FROM person_database WHERE id IN (:id)")
+    Person findSinglePersonById(int id);
+
     @Query("SELECT * FROM person_database ORDER BY ID")
     LiveData<List<Person>> getAllPersonLive();
 

@@ -70,7 +70,7 @@ public class Pay_Whom extends AppCompatActivity {
             @Override
             public void run() {
                 //获得参与这项活动的人的id
-                List<Integer> personList = mConnectionDao.findConnectionByEventId(event_id);
+                List<Integer> personList = mConnectionDao.findPersonIdByEventId(event_id);
 
                 //获得参与这项活动的人的所有信息
                 person = mPersonDao.findPersonById(personList);

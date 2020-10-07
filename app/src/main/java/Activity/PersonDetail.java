@@ -1,8 +1,8 @@
 package Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.account.R;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -10,12 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import com.example.account.R;
+
 import java.util.List;
 
-import Adapter.PersonAdapter;
+import Adapter.PersonInEventAdapter;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
 import Database.ConnectionViewModel;
+import Database.Event;
 import Database.EventDao;
 import Database.EventDatabase;
 import Database.EventViewModel;
@@ -24,7 +27,12 @@ import Database.PersonDao;
 import Database.PersonDatabase;
 import Database.PersonViewModel;
 
-public class Mine_Money extends AppCompatActivity {
+/**
+ * 显示参与某一活动的所有人的信息
+ * 页面布局：detail_layout
+ * 适配器：PersonInEventAdapter
+ */
+public class PersonDetail extends AppCompatActivity {
     EventViewModel mEventViewModel;
     EventDatabase mEventDatabase;
     EventDao mEventDao;
@@ -36,13 +44,21 @@ public class Mine_Money extends AppCompatActivity {
     ConnectionDao mConnectionDao;
 
     RecyclerView mRecyclerView;
-    PersonAdapter mPersonAdapter;
+    PersonInEventAdapter mPersonInEventAdapter;
 
-    List<Person> personList;
+    TextView tv_eventName;//活动名称
+
+    List<Integer> person_idlist;
+    List<Person> mPeople;
+
+    int event_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mine_layout);
+        setContentView(R.layout.detail_layout);
+        Intent intent =getIntent();
+        event_id = intent.getIntExtra("event_id",0);
+
 
         mEventViewModel = ViewModelProviders.of(this).get(EventViewModel.class);
         mEventDatabase = Room.databaseBuilder(this, EventDatabase.class,"event_database.db").build();
@@ -54,41 +70,52 @@ public class Mine_Money extends AppCompatActivity {
         mConnectionDatabase = Room.databaseBuilder(this, ConnectionDatabase.class,"connection_database.db").build();
         mConnectionDao = mConnectionDatabase.getConnectionDao();
 
-        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.s3);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        tv_eventName = findViewById(R.id.eventName);
+        //设置页面中的活动名称，通过数据库获取参与该项活动的所有人对象
         new Thread(new Runnable() {
             @Override
             public void run() {
-                personList = mPersonDao.findPerson();
-                mPersonAdapter = new PersonAdapter(personList,Mine_Money.this);
+                final Event event = mEventDao.findEventByEventId(event_id);
+
+                //设置页面中的活动名称
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mRecyclerView.setAdapter(mPersonAdapter);
+                        tv_eventName.setText(event.getActivity());
                     }
                 });
+
+                //通过数据库获取参与该项活动的所有人对象
+                person_idlist = mConnectionDao.findPersonIdByEventId(event_id);
+                mPeople = mPersonDao.findPersonById(person_idlist);
+
+                mPersonInEventAdapter = new PersonInEventAdapter(mConnectionDao,mPersonDao,mEventDao
+                ,person_idlist,mPeople,event_id);
+                mRecyclerView.setAdapter(mPersonInEventAdapter);
+
             }
         }).start();
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(personList!=null){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    personList = mPersonDao.findPerson();
-                    mPersonAdapter = new PersonAdapter(personList,Mine_Money.this);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRecyclerView.setAdapter(mPersonAdapter);
-                        }
-                    });
-                }
-            }).start();
-        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //通过数据库获取参与该项活动的所有人对象
+                person_idlist = mConnectionDao.findPersonIdByEventId(event_id);
+                mPeople = mPersonDao.findPersonById(person_idlist);
+
+                mPersonInEventAdapter = new PersonInEventAdapter(mConnectionDao,mPersonDao,mEventDao
+                        ,person_idlist,mPeople,event_id);
+                mRecyclerView.setAdapter(mPersonInEventAdapter);
+            }
+        }).start();
     }
 }
