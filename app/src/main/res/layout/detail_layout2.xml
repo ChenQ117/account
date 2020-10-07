@@ -50,8 +50,9 @@
         app:layout_constraintBottom_toTopOf="@id/guideline4"
         app:srcCompat="@drawable/thinking_face" />
 
+    <!--        android:id="@+id/textView5"-->
     <TextView
-        android:id="@+id/textView5"
+    android:id="@+id/eventName"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
@@ -125,8 +126,6 @@
         android:id="@+id/button_end_detail"
         android:layout_width="0dp"
         android:layout_height="37dp"
-        android:layout_marginTop="621dp"
-        android:layout_marginBottom="22dp"
         android:background="#3F51B5"
         android:text="完成"
         android:textColor="#FFFFFF"
@@ -134,19 +133,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_detail"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/eventName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/s3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,8 +29,9 @@
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
-        <activity android:name=".Main2Activity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <activity android:name="Activity.PersonDetail"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+            android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
         <activity android:name=".MainActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"

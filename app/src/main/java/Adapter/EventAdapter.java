@@ -37,7 +37,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     Context mContext;
     List<Integer> person_idlist;
     List<Person> mPeople;
-    List<Connection> mConnections;
+    List<Connection> mConnections = new ArrayList<>();
     ConnectionDao mConnectionDao;
     PersonDao mPersonDao;
     EventDao mEventDao;
@@ -82,31 +82,39 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                 public void run() {
                     person_idlist = mConnectionDao.findPersonIdByEventId(event.getId());
                     mPeople = mPersonDao.findPersonById(person_idlist);
+                    for (int i=0;i<mPeople.size();i++){
+                        mConnections.add(mConnectionDao.findConnectionByEventIdAndPersonId(event.getId(),mPeople.get(i).getId()));
+                    }
                     holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        Person person ;
+                        Connection connection;
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if(isChecked){
                                 event.setEmpty(true);
                                 for (int i=0;i<mPeople.size();i++){
-                                    Person person = mPeople.get(i);
-                                    Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event.getId(),person.getId());
+                                    person = mPeople.get(i);
+                                    connection = mConnections.get(i);
                                     person.setMoney(person.getMoney()-connection.getSinglemoney());
                                     connection.setPay(true);
-                                    mPersonDao.updatePerson(person);
-                                    mConnectionDao.updateConnection(connection);
                                 }
                             }else {
                                 event.setEmpty(false);
                                 for (int i=0;i<mPeople.size();i++) {
-                                    Person person = mPeople.get(i);
-                                    Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event.getId(), person.getId());
+                                    person = mPeople.get(i);
                                     person.setMoney(person.getMoney() + connection.getSinglemoney());
                                     connection.setPay(false);
+                                }
+                            }
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
                                     mPersonDao.updatePerson(person);
                                     mConnectionDao.updateConnection(connection);
                                 }
-                            }
+                            }).start();
                         }
+
                     });
                 }
             }).start();

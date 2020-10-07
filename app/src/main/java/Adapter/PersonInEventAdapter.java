@@ -1,5 +1,7 @@
 package Adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +33,16 @@ public class PersonInEventAdapter extends RecyclerView.Adapter<PersonInEventAdap
     ConnectionDao mConnectionDao;
     PersonDao mPersonDao;
     EventDao mEventDao;
+    Activity mActivity;
 
     int event_id;
 
-    public PersonInEventAdapter(ConnectionDao connectionDao, PersonDao personDao, EventDao eventDao,
-                                List<Integer> person_idlist,List<Person> mPeople,final int event_id) {
+    public PersonInEventAdapter(Activity activity, ConnectionDao connectionDao, PersonDao personDao, EventDao eventDao,
+                                List<Integer> person_idlist, List<Person> mPeople, final int event_id) {
         mConnectionDao = connectionDao;
         mPersonDao = personDao;
         mEventDao = eventDao;
+        mActivity = activity;
         this.event_id = event_id;
         this.person_idlist = person_idlist;
         this.mPeople = mPeople;
@@ -59,11 +63,18 @@ public class PersonInEventAdapter extends RecyclerView.Adapter<PersonInEventAdap
             @Override
             public void run() {
                 final Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event_id,person.getId());
-                holder.personName.setText(person.getName());
-                holder.singleMoney.setText(""+connection.getSinglemoney());
-                if(connection.isPay()){
-                    holder.isPay.setChecked(true);
-                }
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.personName.setText(person.getName());
+                        holder.singleMoney.setText(""+connection.getSinglemoney());
+                        if(connection.isPay()){
+                            holder.isPay.setChecked(true);
+                        }
+                    }
+                });
+
+
                 holder.isPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -74,10 +85,10 @@ public class PersonInEventAdapter extends RecyclerView.Adapter<PersonInEventAdap
                             connection.setPay(false);
                             person.setMoney(person.getMoney()+connection.getSinglemoney());
                         }
-                        mConnectionDao.updateConnection(connection);
-                        mPersonDao.updatePerson(person);
                     }
                 });
+                mConnectionDao.updateConnection(connection);
+                mPersonDao.updatePerson(person);
             }
         }).start();
 

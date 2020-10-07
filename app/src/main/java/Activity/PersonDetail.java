@@ -12,6 +12,7 @@ import androidx.room.Room;
 
 import com.example.account.R;
 
+import java.text.RuleBasedCollator;
 import java.util.List;
 
 import Adapter.PersonInEventAdapter;
@@ -92,9 +93,14 @@ public class PersonDetail extends AppCompatActivity {
                 person_idlist = mConnectionDao.findPersonIdByEventId(event_id);
                 mPeople = mPersonDao.findPersonById(person_idlist);
 
-                mPersonInEventAdapter = new PersonInEventAdapter(mConnectionDao,mPersonDao,mEventDao
+                mPersonInEventAdapter = new PersonInEventAdapter(PersonDetail.this,mConnectionDao,mPersonDao,mEventDao
                 ,person_idlist,mPeople,event_id);
-                mRecyclerView.setAdapter(mPersonInEventAdapter);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRecyclerView.setAdapter(mPersonInEventAdapter);
+                    }
+                });
 
             }
         }).start();
@@ -112,9 +118,14 @@ public class PersonDetail extends AppCompatActivity {
                 person_idlist = mConnectionDao.findPersonIdByEventId(event_id);
                 mPeople = mPersonDao.findPersonById(person_idlist);
 
-                mPersonInEventAdapter = new PersonInEventAdapter(mConnectionDao,mPersonDao,mEventDao
+                mPersonInEventAdapter = new PersonInEventAdapter(PersonDetail.this,mConnectionDao,mPersonDao,mEventDao
                         ,person_idlist,mPeople,event_id);
-                mRecyclerView.setAdapter(mPersonInEventAdapter);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRecyclerView.setAdapter(mPersonInEventAdapter);
+                    }
+                });
             }
         }).start();
     }
