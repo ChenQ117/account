@@ -51,7 +51,7 @@
 <!--    android:id="@+id/textView5"-->
 
     <TextView
-        android:id="@+id/eventName"
+        android:id="@+id/personName"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"

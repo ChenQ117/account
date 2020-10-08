@@ -25,9 +25,11 @@
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:gravity="center"
-            android:text="活动详情"
+            android:text="人物详情"
             android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="12dp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -45,7 +47,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="136dp"
         app:layout_constraintBottom_toTopOf="@id/guideline4"
-        app:layout_constraintEnd_toStartOf="@+id/eventName"
+        app:layout_constraintEnd_toStartOf="@+id/personName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_detail"
         app:srcCompat="@drawable/thinking_face" />
@@ -53,7 +55,7 @@
     <!--        android:id="@+id/textView5"-->
 
     <TextView
-        android:id="@+id/eventName"
+        android:id="@+id/personName"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"

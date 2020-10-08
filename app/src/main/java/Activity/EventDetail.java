@@ -2,6 +2,9 @@ package Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.account.R;
 
@@ -14,7 +17,6 @@ import androidx.room.Room;
 import java.util.List;
 
 import Adapter.EventInPersonAdapter;
-import Adapter.PersonInEventAdapter;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
 import Database.ConnectionViewModel;
@@ -22,6 +24,7 @@ import Database.Event;
 import Database.EventDao;
 import Database.EventDatabase;
 import Database.EventViewModel;
+import Database.Person;
 import Database.PersonDao;
 import Database.PersonDatabase;
 import Database.PersonViewModel;
@@ -43,6 +46,9 @@ public class EventDetail extends AppCompatActivity {
     RecyclerView mRecyclerView;
     EventInPersonAdapter mEventInPersonAdapter;
 
+    TextView tv_personName;//人名
+    Button mButton;//完成
+
     List<Integer> eventIdList;
     List<Event> mEvents;
 
@@ -50,7 +56,7 @@ public class EventDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detail_layout);
+        setContentView(R.layout.detail_layout2);
         Intent intent =getIntent();
         person_id = intent.getIntExtra("person_id",0);
 
@@ -65,17 +71,28 @@ public class EventDetail extends AppCompatActivity {
         mConnectionDatabase = Room.databaseBuilder(this, ConnectionDatabase.class,"connection_database.db").build();
         mConnectionDao = mConnectionDatabase.getConnectionDao();
 
+        tv_personName = findViewById(R.id.personName);
+        mButton = findViewById(R.id.button_end_detail);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventDetail.this.finish();
+            }
+        });
 
         mRecyclerView = findViewById(R.id.s3);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         new Thread(new Runnable() {
             @Override
             public void run() {
+                final Person person = mPersonDao.findSinglePersonById(person_id);
                 eventIdList = mConnectionDao.findEventIdByPersonId(person_id);
                 mEvents = mEventDao.findEventByEventId(eventIdList);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        tv_personName.setText(person.getName());
+
                         mEventInPersonAdapter = new EventInPersonAdapter(EventDetail.this,mConnectionDao,mPersonDao,mEventDao,
                                 eventIdList,mEvents,person_id);
                         mRecyclerView.setAdapter(mEventInPersonAdapter);

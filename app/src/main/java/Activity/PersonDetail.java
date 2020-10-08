@@ -14,7 +14,6 @@ import androidx.room.Room;
 
 import com.example.account.R;
 
-import java.text.RuleBasedCollator;
 import java.util.List;
 
 import Adapter.PersonInEventAdapter;
@@ -77,7 +76,7 @@ public class PersonDetail extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.s3);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        tv_eventName = findViewById(R.id.eventName);
+        tv_eventName = findViewById(R.id.personName);
         mButton = findViewById(R.id.button_end_detail);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
