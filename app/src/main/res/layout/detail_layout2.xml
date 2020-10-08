@@ -40,33 +40,34 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.07" />
 
+    <!--        android:id="@+id/textView5"-->
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="136dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline4"
-        app:layout_constraintEnd_toStartOf="@+id/personName"
+        app:layout_constraintBottom_toTopOf="@+id/button_end_detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.078"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_detail"
-        app:srcCompat="@drawable/thinking_face" />
-
-    <!--        android:id="@+id/textView5"-->
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.094"
+        app:srcCompat="@drawable/people_holding_hands"
+         />
 
     <TextView
         android:id="@+id/personName"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:text="人名"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/guideline4"
+        app:layout_constraintBottom_toBottomOf="@+id/button_end_detail"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_detail"
-        app:layout_constraintVertical_bias="0.459" />
+        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.104" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/s3"
@@ -98,12 +99,13 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginStart="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
-        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintHorizontal_bias="0.126"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline4"
-        app:srcCompat="@drawable/people_holding_hands" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.253"
+        app:srcCompat="@drawable/thinking_face" />
 
     <TextView
         android:id="@+id/textView6"
@@ -113,10 +115,11 @@
         android:text="相关活动"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toStartOf="@+id/s3"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.659" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
