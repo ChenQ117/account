@@ -90,6 +90,17 @@ public class Mine_Money extends AppCompatActivity {
             Person person = personList.get(i);
             List<Integer> eventIdList = mConnectionDao.findEventIdByPersonId(person.getId());
             List<Event> eventByEventId = mEventDao.findEventByEventId(eventIdList);
+            List<Boolean> isPayList = mConnectionDao.findIsPayByPersonId(person.getId());
+            int numIsPay = 0;
+            for (int j = 0;j<isPayList.size();j++){
+                if (isPayList.get(j)){
+                    numIsPay++;
+                }
+            }
+            if (numIsPay == isPayList.size()){
+                person.setPay(true);
+                mPersonDao.updatePerson(person);
+            }
 //            ||(person.getMoney() == 0&&!person.isPay())
             if (eventByEventId.isEmpty()){
                 mPersonDao.deletePerson(person);

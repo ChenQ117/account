@@ -45,9 +45,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
 
     boolean flag_cardView = false;
 
-    public EventAdapter(List<Event> allEvent,Context context,ConnectionDao connectionDao,PersonDao personDao) {
+    public EventAdapter(List<Event> allEvent,Context context,ConnectionDao connectionDao,PersonDao personDao,EventDao eventDao) {
         mConnectionDao = connectionDao;
         mPersonDao = personDao;
+        mEventDao = eventDao;
         this.allEvent = allEvent;
         mContext = context;
     }
@@ -103,15 +104,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                                 for (int i=0;i<mPeople.size();i++){
                                     person = mPeople.get(i);
                                     connection = mConnections.get(i);
-                                    person.setMoney(person.getMoney()-connection.getSinglemoney());
-                                    connection.setPay(true);
+                                    if (!connection.isPay()){
+                                        person.setMoney(person.getMoney()-connection.getSinglemoney());
+                                        connection.setPay(true);
+                                    }
+
                                 }
                             }else {
                                 event.setEmpty(false);
                                 for (int i=0;i<mPeople.size();i++) {
                                     person = mPeople.get(i);
-                                    person.setMoney(person.getMoney() + connection.getSinglemoney());
-                                    connection.setPay(false);
+                                    if (connection.isPay()){
+                                        person.setMoney(person.getMoney() + connection.getSinglemoney());
+                                        connection.setPay(false);
+                                    }
                                 }
                             }
                             new Thread(new Runnable() {
@@ -119,6 +125,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                                 public void run() {
                                     mPersonDao.updatePerson(person);
                                     mConnectionDao.updateConnection(connection);
+                                    mEventDao.updateEvent(event);
                                 }
                             }).start();
                         }

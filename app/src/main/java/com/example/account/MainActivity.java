@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //剔除无效活动
+    //剔除无效活动,初始化
     public void deleteNullEvent(){
         //先删除人名为空的活动即无效活动，再获得有效活动
         List<Integer> eventIdList = mEventDao.getAllEventId();
@@ -120,18 +120,30 @@ public class MainActivity extends AppCompatActivity {
             int temp_eventId = eventIdList.get(i);
             List<Integer> personIdList = mConnectionDao.findPersonIdByEventId(temp_eventId);
             List<Integer> singleMoneyList = mConnectionDao.findSingleMoneyByEventId(temp_eventId);
-            int numb = 0;
+            List<Boolean> isPayList = mConnectionDao.findIsPayByEventId(temp_eventId);
+            int numbSingleMaoney = 0;
+            int numbisPay =0;
 
 
             //查找与某个活动有关的所有人的单笔金额为0的个数，若全为0，则该活动为无效活动
             for (int j = 0;j<singleMoneyList.size();j++){
                 if (singleMoneyList.get(j)==0){
-                    numb++;
+                    numbSingleMaoney++;
+                }
+                //查找与某个活动有关的所有人的单笔金额是否付清，若付清，则该活动被付清
+                if (isPayList.get(j)){
+                    numbisPay++;
                 }
             }
 
+            //查找与某个活动有关的所有人的单笔金额是否付清，若付清，则该活动被付清
+            if (numbisPay == isPayList.size()){
+                Event event_temp = mEventDao.findEventByEventId(temp_eventId);
+                mEventDao.updateEvent(event_temp);
+            }
+
             //如果与某活动有关所有人已经不存在了，则该活动为无效活动
-            if (numb >= singleMoneyList.size()||personIdList.isEmpty()){
+            if (numbSingleMaoney >= singleMoneyList.size()||personIdList.isEmpty()){
                 Event event_temp = mEventDao.findEventByEventId(temp_eventId);
                 mEventDao.deleteEvent(event_temp);
             }
@@ -145,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         deleteNullEvent();
 
         events = mEventDao.getAllEvent();
-        mEventAdapter = new EventAdapter(events,MainActivity.this,mConnectionDao,mPersonDao);
+        mEventAdapter = new EventAdapter(events,MainActivity.this,mConnectionDao,mPersonDao,mEventDao);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

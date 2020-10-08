@@ -132,13 +132,16 @@ public class PersonDetail extends AppCompatActivity {
             public void run() {
                 final Event event = mEventDao.findEventByEventId(event_id);
 
-                //设置页面中的活动名称
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_eventName.setText(event.getActivity());
-                    }
-                });
+                if (event!=null){
+                    //设置页面中的活动名称
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv_eventName.setText(event.getActivity());
+                        }
+                    });
+                }
+
 
                 //通过数据库获取参与该项活动的所有人对象
                 person_idlist = mConnectionDao.findPersonIdByEventId(event_id);

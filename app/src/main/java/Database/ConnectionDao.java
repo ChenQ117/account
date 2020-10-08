@@ -37,6 +37,12 @@ public interface ConnectionDao{
     @Query("SELECT singlemoney FROM connection_database WHERE event_id IN (:eventid)")
     List<Integer> findSingleMoneyByEventId(int  eventid);
 
+    @Query("SELECT isPay FROM connection_database WHERE event_id IN (:eventid)")
+    List<Boolean> findIsPayByEventId(int  eventid);
+
+    @Query("SELECT isPay FROM connection_database WHERE person_Id IN (:personid)")
+    List<Boolean> findIsPayByPersonId(int  personid);
+
     @Query("SELECT event_id FROM connection_database WHERE person_Id IN (:personid)")
     List<Integer> findEventIdByPersonId(int ... personid);
 
