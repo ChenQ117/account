@@ -47,8 +47,6 @@ public class EventInPersonAdapter extends RecyclerView.Adapter<EventInPersonAdap
         this.person_id = person_id;
         this.eventIdList = eventIdList;
         this.mEvents = mEvents;
-
-
     }
 
     @NonNull

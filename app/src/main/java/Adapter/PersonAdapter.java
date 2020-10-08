@@ -32,6 +32,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
     PersonDao mPersonDao;
     EventDao mEventDao;
 
+    boolean flag_cardView = false;
+
     public PersonAdapter(ConnectionDao connectionDao ,PersonDao personDao,List<Person> allPerson, Context context) {
         this.allPerson = allPerson;
         mConnectionDao = connectionDao;
@@ -56,14 +58,20 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
             final Person person=allPerson.get(position);
             holder.personName.setText(person.getName());
             holder.allMoney.setText(""+person.getMoney());
-            holder.mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, EventDetail.class);
-                    intent.putExtra("person_id",person.getId());
-                    mContext.startActivity(intent);
-                }
-            });
+
+            //活动跳转
+            if (!flag_cardView){
+                holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        flag_cardView = true;
+                        Intent intent = new Intent(mContext, EventDetail.class);
+                        intent.putExtra("person_id",person.getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+            }
+
             if(person.isPay()){
                 holder.mCheckBox.setChecked(true);
             }

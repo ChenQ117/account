@@ -57,6 +57,8 @@ public class PersonDetail extends AppCompatActivity {
     List<Person> mPeople;
 
     int event_id;
+    boolean flag_btfinish = false;
+    boolean flag_btdelete = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,40 +82,50 @@ public class PersonDetail extends AppCompatActivity {
 
         tv_eventName = findViewById(R.id.personName);
         bt_finish = findViewById(R.id.button_end_detail);
-        bt_finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PersonDetail.this.finish();
-            }
-        });
+        if (!flag_btfinish){
+            bt_finish.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    flag_btfinish = true;
+                    PersonDetail.this.finish();
+                }
+            });
+
+        }
 
         bt_delete = findViewById(R.id.button_delete);
-        bt_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Event event = mEventDao.findEventByEventId(event_id);
-                        mEventDao.deleteEvent(event);
-                        List<Connection> connections = mConnectionDao.findConnectionByEventId(event_id);
-                        for (int i=0;i<connections.size();i++){
-                            Connection temp_connection = connections.get(i);
-                            if (!temp_connection.isPay()){
-                                temp_connection.setPay(true);
-                                Person person_temp = mPersonDao.findSinglePersonById(temp_connection.getPersonId());
-                                person_temp.setMoney(person_temp.getMoney() - temp_connection.getSinglemoney());
-                                if(person_temp.getMoney()==0) {
-                                    mPersonDao.deletePerson(person_temp);
+        if(!flag_btdelete){
+            bt_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    flag_btdelete = true;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Event event = mEventDao.findEventByEventId(event_id);
+                            mEventDao.deleteEvent(event);
+                            List<Connection> connections = mConnectionDao.findConnectionByEventId(event_id);
+                            for (int i=0;i<connections.size();i++){
+                                Connection temp_connection = connections.get(i);
+                                if (!temp_connection.isPay()){
+                                    temp_connection.setPay(true);
+                                    Person person_temp = mPersonDao.findSinglePersonById(temp_connection.getPersonId());
+                                    if (person_temp !=null){
+                                        person_temp.setMoney(person_temp.getMoney() - temp_connection.getSinglemoney());
+                                        if(person_temp.getMoney()==0) {
+                                            mPersonDao.deletePerson(person_temp);
+                                        }
+                                    }
                                 }
                             }
+                            mConnectionDao.deleteConnection(connections);
                         }
-                        mConnectionDao.deleteConnection(connections);
-                    }
-                }).start();
-                PersonDetail.this.finish();
-            }
-        });
+                    }).start();
+                    PersonDetail.this.finish();
+                }
+            });
+        }
+
         //设置页面中的活动名称，通过数据库获取参与该项活动的所有人对象
         new Thread(new Runnable() {
             @Override

@@ -33,6 +33,7 @@ import Database.PersonViewModel;
 /**
  * 活动详情页面，显示活动总金额与参与人
  * layout：detail_layout2
+ * Adapter:EventInPersonAdapter
  */
 public class EventDetail extends AppCompatActivity {
     EventViewModel mEventViewModel;
@@ -55,6 +56,8 @@ public class EventDetail extends AppCompatActivity {
     List<Integer> eventIdList;
     List<Event> mEvents;
 
+    boolean flag_btfinish = false;//用于判断完成按钮的点击次数
+    boolean flag_btdelete = false;//用于判断删除按钮的点击次数
     int person_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,31 +79,37 @@ public class EventDetail extends AppCompatActivity {
 
         tv_personName = findViewById(R.id.personName);
         bt_finish = findViewById(R.id.button_end_detail);
-        bt_finish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventDetail.this.finish();
-            }
-        });
+        if(!flag_btfinish){
+            bt_finish.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    flag_btfinish = true;
+                    EventDetail.this.finish();
+                }
+            });
+        }
 
         //删除某个人
         bt_delete = findViewById(R.id.button_delete);
-        bt_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Person person = mPersonDao.findSinglePersonById(person_id);
-                        mPersonDao.deletePerson(person);
-                        List<Connection> connection = mConnectionDao.findConnectionByPersonId(person_id);
-                        mConnectionDao.deleteConnection(connection);
+        if(!flag_btdelete){
+            bt_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    flag_btdelete = true;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Person person = mPersonDao.findSinglePersonById(person_id);
+                            mPersonDao.deletePerson(person);
+                            List<Connection> connection = mConnectionDao.findConnectionByPersonId(person_id);
+                            mConnectionDao.deleteConnection(connection);
 
-                    }
-                }).start();
-                EventDetail.this.finish();
-            }
-        });
+                        }
+                    }).start();
+                    EventDetail.this.finish();
+                }
+            });
+        }
 
         mRecyclerView = findViewById(R.id.s3);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));

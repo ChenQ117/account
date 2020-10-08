@@ -43,6 +43,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     PersonDao mPersonDao;
     EventDao mEventDao;
 
+    boolean flag_cardView = false;
+
     public EventAdapter(List<Event> allEvent,Context context,ConnectionDao connectionDao,PersonDao personDao) {
         mConnectionDao = connectionDao;
         mPersonDao = personDao;
@@ -66,14 +68,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
             final Event event=allEvent.get(position);
             holder.eventName.setText(event.getActivity());
             holder.allMoney.setText(""+event.getAmount());
-            holder.mCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, PersonDetail.class);
-                    intent.putExtra("event_id",event.getId());
-                    mContext.startActivity(intent);
-                }
-            });
+            if (!flag_cardView){
+                holder.mCardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        flag_cardView = true;
+                        Intent intent = new Intent(mContext, PersonDetail.class);
+                        intent.putExtra("event_id",event.getId());
+                        mContext.startActivity(intent);
+                    }
+                });
+            }
+
 
             //如果该活动付清，则勾选
             if(event.isEmpty()){

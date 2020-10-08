@@ -54,7 +54,8 @@ public class Item_Input extends AppCompatActivity {
     LinearLayout my_input_layout;//添加人名的布局
     ArrayList<EditText> edit4;//记录人名
     EditText editText1;//新建Edit
-    private static final String TAG = "Main3";
+
+    boolean flag_btnext = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +78,6 @@ public class Item_Input extends AppCompatActivity {
         mConnectionDatabase = Room.databaseBuilder(this,ConnectionDatabase.class,"connection_database.db").build();
         mConnectionDao = mConnectionDatabase.getConnectionDao();
 
-
-
         button_input_people_01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,106 +91,107 @@ public class Item_Input extends AppCompatActivity {
                 }
             }
         });
-        nextbutton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                editinput_01 = findViewById(R.id.edit_input1);
-                editinput_02 = findViewById(R.id.edit_input2);
-                editinput_03 = findViewById(R.id.edit_input3);
-                final String activityname = editinput_02.getText().toString().trim();
-                final String counts = editinput_03.getText().toString().trim();
-                final String moneys = editinput_01.getText().toString().trim();
-                int flag = 1;//用于判断人名是否为空
-                for(EditText edit:edit4){
-                    if("".equals(edit.getText().toString().trim())){
-                        flag = 2;
-                        break;
+
+        if (!flag_btnext){
+            nextbutton1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    flag_btnext = true;
+                    editinput_01 = findViewById(R.id.edit_input1);
+                    editinput_02 = findViewById(R.id.edit_input2);
+                    editinput_03 = findViewById(R.id.edit_input3);
+                    final String activityname = editinput_02.getText().toString().trim();
+                    final String counts = editinput_03.getText().toString().trim();
+                    final String moneys = editinput_01.getText().toString().trim();
+                    int flag = 1;//用于判断人名是否为空
+                    for(EditText edit:edit4){
+                        if("".equals(edit.getText().toString().trim())){
+                            flag = 2;
+                            break;
+                        }
+                    }
+                    if(flag == 2 ||"".equals(activityname)||"".equals(counts)||"".equals(moneys)){
+                        Toast.makeText(v.getContext(),"信息未填写完整",Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        //设置消费活动表
+                        //设置人表 设置参加记录表
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                int count = Integer.parseInt(counts);
+                                int money = Integer.parseInt(moneys);
+                                Event event = new Event(activityname,count,money );
+                                mEventDao.insertEvent(event);
+
+                                String[] personname = new String[edit4.size()];
+                                List<Event> eventList = mEventDao.getAllEvent();
+                                int index = eventList.size()-1;
+                                event_id = eventList.get(index).getId();
+
+                                for(int i=0;i<edit4.size();i++){
+                                    personname[i] =  edit4.get(i).getText().toString().trim();
+                                }
+                                List<Person> personList = mPersonDao.findPerson();
+                                List<String> personNameList = mPersonDao.findPersonName();
+
+                                int person_id = 0;
+                                if (!personList.isEmpty()){
+                                    person_id = personList.get(personList.size()-1).getId();
+                                }
+
+                                for (int i = 0;i<personname.length;i++){
+
+                                    if (!personNameList.contains(personname[i])){
+                                        Person person = new Person(personname[i],0);
+                                        mPersonDao.insertPerson(person);
+//                                    mPersonViewModel.insertPerson(person);
+                                        personList.add(person);
+                                        personNameList.add(personname[i]);
+                                        person_id ++;
+                                        Connection connection = new Connection(event_id,person_id);
+                                        mConnectionDao.insertConnection(connection);
+//                                    mConnectionViewModel.insertConnection(connection);
+                                    }else {
+                                        Person person = mPersonDao.findPersonByName(personname[i]);
+                                        Connection connection = new Connection(event_id,person.getId());
+                                        mConnectionDao.insertConnection(connection);
+//                                    mConnectionViewModel.insertConnection(connection);
+                                    }
+                                }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(Item_Input.this);
+                                        builder.setTitle("您是否付钱");
+                                        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(v.getContext(),Pay_Whom.class);
+                                                intent.putExtra("event_id",event_id);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent intent = new Intent(v.getContext(),Who_Pay.class);
+                                                intent.putExtra("event_id",event_id);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        builder.show();
+                                    }
+                                });
+                            }
+                        }).start();
                     }
                 }
-                if(flag == 2 ||"".equals(activityname)||"".equals(counts)||"".equals(moneys)){
-                    Toast.makeText(v.getContext(),"信息未填写完整",Toast.LENGTH_SHORT).show();
+            });
+        }
 
-                }else {
-
-
-                    //设置消费活动表
-
-
-                    //设置人表 设置参加记录表
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            int count = Integer.parseInt(counts);
-                            int money = Integer.parseInt(moneys);
-                            Event event = new Event(activityname,count,money );
-                            mEventDao.insertEvent(event);
-
-                            String[] personname = new String[edit4.size()];
-                            List<Event> eventList = mEventDao.getAllEvent();
-                            int index = eventList.size()-1;
-                            event_id = eventList.get(index).getId();
-
-                            for(int i=0;i<edit4.size();i++){
-                                personname[i] =  edit4.get(i).getText().toString().trim();
-                            }
-                            List<Person> personList = mPersonDao.findPerson();
-                            List<String> personNameList = mPersonDao.findPersonName();
-
-                            int person_id = 0;
-                            if (!personList.isEmpty()){
-                                person_id = personList.get(personList.size()-1).getId();
-                            }
-
-                            for (int i = 0;i<personname.length;i++){
-
-                                if (!personNameList.contains(personname[i])){
-                                    Person person = new Person(personname[i],0);
-                                    mPersonDao.insertPerson(person);
-//                                    mPersonViewModel.insertPerson(person);
-                                    personList.add(person);
-                                    personNameList.add(personname[i]);
-                                    person_id ++;
-                                    Connection connection = new Connection(event_id,person_id);
-                                    mConnectionDao.insertConnection(connection);
-//                                    mConnectionViewModel.insertConnection(connection);
-                                }else {
-                                    Person person = mPersonDao.findPersonByName(personname[i]);
-                                    Connection connection = new Connection(event_id,person.getId());
-                                    mConnectionDao.insertConnection(connection);
-//                                    mConnectionViewModel.insertConnection(connection);
-                                }
-                            }
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(Item_Input.this);
-                                    builder.setTitle("您是否付钱");
-                                    builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(v.getContext(),Pay_Whom.class);
-                                            intent.putExtra("event_id",event_id);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent intent = new Intent(v.getContext(),Who_Pay.class);
-                                            intent.putExtra("event_id",event_id);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    builder.show();
-                                }
-                            });
-                        }
-                    }).start();
-                }
-            }
-        });
 
     }
 

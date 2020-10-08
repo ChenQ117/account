@@ -53,6 +53,8 @@ public class Who_Pay extends AppCompatActivity {
     Map<CheckBox,EditText> mCheckBoxEditTextMap = new HashMap<>();
     int event_id;
     CheckBox cb;
+
+    boolean flag_btnext = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,48 +95,46 @@ public class Who_Pay extends AppCompatActivity {
                     }
                 });
 
-
             }
         }).start();
 
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Set<CheckBox> checkBoxes = mCheckBoxEditTextMap.keySet();
-                int flag = 0;//用于判断金额是否填写不合理
-                for(final CheckBox checkBox: checkBoxes){
-                    if(checkBox.isChecked()){
+        if (!flag_btnext){
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Set<CheckBox> checkBoxes = mCheckBoxEditTextMap.keySet();
+                    int flag = 0;//用于判断金额是否填写不合理
+                    for(final CheckBox checkBox: checkBoxes){
+                        if(checkBox.isChecked()){
 
-                        final String moneys = mCheckBoxEditTextMap.get(checkBox).getText().toString().trim();
-                        if("".equals(moneys)){
-                            flag = 1;
-                            Toast.makeText(v.getContext(),"金额填写错误",Toast.LENGTH_SHORT).show();
-                        }else {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    int money = Integer.parseInt(moneys);
-                                    Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
-                                    Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event_id,person.getId());
-                                    connection.setSinglemoney(money);
-                                    mConnectionDao.updateConnection(connection);
-                                    person.setMoney(person.getMoney()+money);
-                                    mPersonDao.updatePerson(person);
-                                }
-                            }).start();
-
+                            final String moneys = mCheckBoxEditTextMap.get(checkBox).getText().toString().trim();
+                            if("".equals(moneys)){
+                                flag = 1;
+                                Toast.makeText(v.getContext(),"金额填写错误",Toast.LENGTH_SHORT).show();
+                            }else {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int money = Integer.parseInt(moneys);
+                                        Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
+                                        Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event_id,person.getId());
+                                        connection.setSinglemoney(money);
+                                        mConnectionDao.updateConnection(connection);
+                                        person.setMoney(person.getMoney()+money);
+                                        mPersonDao.updatePerson(person);
+                                    }
+                                }).start();
+                            }
                         }
-
+                    }
+                    if(flag == 0){
+                        Toast.makeText(Who_Pay.this,"添加成功",Toast.LENGTH_SHORT).show();
+                        ActivityCollector.finishAll();
                     }
                 }
-                if(flag == 0){
-                    Toast.makeText(Who_Pay.this,"添加成功",Toast.LENGTH_SHORT).show();
-                    ActivityCollector.finishAll();
-                }
-            }
-        });
-
+            });
+        }
     }
     protected void onDestroy(){
         super.onDestroy();

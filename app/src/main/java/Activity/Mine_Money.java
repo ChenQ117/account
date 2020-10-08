@@ -26,6 +26,9 @@ import Database.PersonDao;
 import Database.PersonDatabase;
 import Database.PersonViewModel;
 
+/**
+ * Adapter:PersonAdapter
+ */
 public class Mine_Money extends AppCompatActivity {
     EventViewModel mEventViewModel;
     EventDatabase mEventDatabase;
@@ -87,7 +90,8 @@ public class Mine_Money extends AppCompatActivity {
             Person person = personList.get(i);
             List<Integer> eventIdList = mConnectionDao.findEventIdByPersonId(person.getId());
             List<Event> eventByEventId = mEventDao.findEventByEventId(eventIdList);
-            if (eventByEventId.isEmpty()||person.getMoney() == 0){
+//            ||(person.getMoney() == 0&&!person.isPay())
+            if (eventByEventId.isEmpty()){
                 mPersonDao.deletePerson(person);
             }
         }

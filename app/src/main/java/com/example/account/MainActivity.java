@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     EventAdapter mEventAdapter;
     RecyclerView mRecyclerView;
     List<Event> events;
+
+    boolean flag_fab = false;//用于判断floatbutton的点击事件，只允许点一次
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
         mConnectionViewModel = ViewModelProviders.of(this).get(ConnectionViewModel.class);
         mConnectionDatabase = Room.databaseBuilder(this, ConnectionDatabase.class,"connection_database.db").build();
         mConnectionDao = mConnectionDatabase.getConnectionDao();
+
+        if (!flag_fab){
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    flag_fab = true;
+                    Intent intent = new Intent(v.getContext(), Item_Input.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -110,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
             //查找与某个活动有关的所有人的单笔金额为0的个数，若全为0，则该活动为无效活动
             for (int j = 0;j<singleMoneyList.size();j++){
-                if (singleMoneyList.get(i)==0){
+                if (singleMoneyList.get(j)==0){
                     numb++;
                 }
             }
@@ -139,11 +154,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    public void onClickfab(View view){
-        Intent intent = new Intent(this, Item_Input.class);
-        startActivity(intent);
-    }
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.tool, menu);
         return true;
