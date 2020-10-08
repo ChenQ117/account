@@ -17,6 +17,7 @@ import com.example.account.R;
 import java.util.List;
 
 import Adapter.PersonInEventAdapter;
+import Database.Connection;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
 import Database.ConnectionViewModel;
@@ -49,7 +50,8 @@ public class PersonDetail extends AppCompatActivity {
     PersonInEventAdapter mPersonInEventAdapter;
 
     TextView tv_eventName;//活动名称
-    Button mButton;//完成
+    Button bt_finish;//完成
+    Button bt_delete;//删除
 
     List<Integer> person_idlist;
     List<Person> mPeople;
@@ -77,10 +79,38 @@ public class PersonDetail extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         tv_eventName = findViewById(R.id.personName);
-        mButton = findViewById(R.id.button_end_detail);
-        mButton.setOnClickListener(new View.OnClickListener() {
+        bt_finish = findViewById(R.id.button_end_detail);
+        bt_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PersonDetail.this.finish();
+            }
+        });
+
+        bt_delete = findViewById(R.id.button_delete);
+        bt_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Event event = mEventDao.findEventByEventId(event_id);
+                        mEventDao.deleteEvent(event);
+                        List<Connection> connections = mConnectionDao.findConnectionByEventId(event_id);
+                        for (int i=0;i<connections.size();i++){
+                            Connection temp_connection = connections.get(i);
+                            if (!temp_connection.isPay()){
+                                temp_connection.setPay(true);
+                                Person person_temp = mPersonDao.findSinglePersonById(temp_connection.getPersonId());
+                                person_temp.setMoney(person_temp.getMoney() - temp_connection.getSinglemoney());
+                                if(person_temp.getMoney()==0) {
+                                    mPersonDao.deletePerson(person_temp);
+                                }
+                            }
+                        }
+                        mConnectionDao.deleteConnection(connections);
+                    }
+                }).start();
                 PersonDetail.this.finish();
             }
         });

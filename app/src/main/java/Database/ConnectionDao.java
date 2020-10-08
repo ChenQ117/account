@@ -16,6 +16,10 @@ public interface ConnectionDao{
     void updateConnection(Connection...connections);
     @Delete
     void deleteConnection(Connection...connections);
+
+    @Delete
+    void deleteConnection(List<Connection> connections);
+
     @Query("SELECT * FROM connection_database ORDER BY ID")
     LiveData<List<Connection>> getAllConnectionLive();
     @Query("SELECT * FROM connection_database")
@@ -34,4 +38,9 @@ public interface ConnectionDao{
 
     @Query("SELECT * FROM connection_database WHERE person_Id IN (:personId)")
     List<Connection> findConnectionByPersonId(int...personId);
+
+    @Query("SELECT * FROM connection_database WHERE person_Id IN (:eventId)")
+    List<Connection> findConnectionByEventId(int...eventId);
+
+
 }

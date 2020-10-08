@@ -17,6 +17,7 @@ import androidx.room.Room;
 import java.util.List;
 
 import Adapter.EventInPersonAdapter;
+import Database.Connection;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
 import Database.ConnectionViewModel;
@@ -31,6 +32,7 @@ import Database.PersonViewModel;
 
 /**
  * 活动详情页面，显示活动总金额与参与人
+ * layout：detail_layout2
  */
 public class EventDetail extends AppCompatActivity {
     EventViewModel mEventViewModel;
@@ -47,7 +49,8 @@ public class EventDetail extends AppCompatActivity {
     EventInPersonAdapter mEventInPersonAdapter;
 
     TextView tv_personName;//人名
-    Button mButton;//完成
+    Button bt_finish;//完成
+    Button bt_delete;//删除
 
     List<Integer> eventIdList;
     List<Event> mEvents;
@@ -72,10 +75,29 @@ public class EventDetail extends AppCompatActivity {
         mConnectionDao = mConnectionDatabase.getConnectionDao();
 
         tv_personName = findViewById(R.id.personName);
-        mButton = findViewById(R.id.button_end_detail);
-        mButton.setOnClickListener(new View.OnClickListener() {
+        bt_finish = findViewById(R.id.button_end_detail);
+        bt_finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventDetail.this.finish();
+            }
+        });
+
+        //删除某个人
+        bt_delete = findViewById(R.id.button_delete);
+        bt_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Person person = mPersonDao.findSinglePersonById(person_id);
+                        mPersonDao.deletePerson(person);
+                        List<Connection> connection = mConnectionDao.findConnectionByPersonId(person_id);
+                        mConnectionDao.deleteConnection(connection);
+
+                    }
+                }).start();
                 EventDetail.this.finish();
             }
         });
