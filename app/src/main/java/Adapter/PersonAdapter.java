@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.account.R;
@@ -31,8 +32,10 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
     PersonDao mPersonDao;
     EventDao mEventDao;
 
-    public PersonAdapter(List<Person> allPerson, Context context) {
+    public PersonAdapter(ConnectionDao connectionDao ,PersonDao personDao,List<Person> allPerson, Context context) {
         this.allPerson = allPerson;
+        mConnectionDao = connectionDao;
+        mPersonDao = personDao;
         mContext = context;
     }
 
@@ -53,7 +56,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
             final Person person=allPerson.get(position);
             holder.personName.setText(person.getName());
             holder.allMoney.setText(""+person.getMoney());
-            holder.personName.setOnClickListener(new View.OnClickListener() {
+            holder.mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, EventDetail.class);
@@ -67,29 +70,31 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
+                    final List<Connection> connectionList = mConnectionDao.findConnectionByPersonId(person.getId());
                     holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        Connection connection;
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                             if(isChecked){
                                 person.setPay(true);
-                                List<Connection> connectionList = mConnectionDao.findConnectionByPersonId(person.getId());
                                 for (int i=0;i<connectionList.size();i++){
-                                    Connection connection = connectionList.get(i);
+                                    connection = connectionList.get(i);
                                     connection.setPay(true);
-                                    mConnectionDao.updateConnection(connection);
                                 }
-                                mPersonDao.updatePerson(person);
                             }else {
                                 person.setPay(false);
-                                List<Connection> connectionList = mConnectionDao.findConnectionByPersonId(person.getId());
                                 for (int i=0;i<connectionList.size();i++){
-                                    Connection connection = connectionList.get(i);
+                                    connection = connectionList.get(i);
                                     connection.setPay(false);
-                                    mConnectionDao.updateConnection(connection);
                                 }
-                                mPersonDao.updatePerson(person);
                             }
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mConnectionDao.updateConnection(connection);
+                                    mPersonDao.updatePerson(person);
+                                }
+                            }).start();
                         }
                     });
                 }
@@ -109,12 +114,14 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
         TextView personName;
         TextView allMoney;
         CheckBox mCheckBox;
+        CardView mCardView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             personName =itemView.findViewById(R.id.name);
             allMoney = itemView.findViewById(R.id.allMoney);
             mCheckBox = itemView.findViewById(R.id.isPay);
+            mCardView = itemView.findViewById(R.id.card_view);
         }
     }
 

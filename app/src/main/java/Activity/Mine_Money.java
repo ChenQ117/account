@@ -61,7 +61,7 @@ public class Mine_Money extends AppCompatActivity {
             @Override
             public void run() {
                 personList = mPersonDao.findPerson();
-                mPersonAdapter = new PersonAdapter(personList,Mine_Money.this);
+                mPersonAdapter = new PersonAdapter(mConnectionDao,mPersonDao,personList,Mine_Money.this);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -80,7 +80,7 @@ public class Mine_Money extends AppCompatActivity {
                 @Override
                 public void run() {
                     personList = mPersonDao.findPerson();
-                    mPersonAdapter = new PersonAdapter(personList,Mine_Money.this);
+                    mPersonAdapter = new PersonAdapter(mConnectionDao,mPersonDao,personList,Mine_Money.this);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

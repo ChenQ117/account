@@ -76,7 +76,7 @@ public class EventDetail extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mEventInPersonAdapter = new EventInPersonAdapter(mConnectionDao,mPersonDao,mEventDao,
+                        mEventInPersonAdapter = new EventInPersonAdapter(EventDetail.this,mConnectionDao,mPersonDao,mEventDao,
                                 eventIdList,mEvents,person_id);
                         mRecyclerView.setAdapter(mEventInPersonAdapter);
                     }
@@ -98,7 +98,7 @@ public class EventDetail extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mEventInPersonAdapter = new EventInPersonAdapter(mConnectionDao,mPersonDao,mEventDao,
+                        mEventInPersonAdapter = new EventInPersonAdapter(EventDetail.this,mConnectionDao,mPersonDao,mEventDao,
                                 eventIdList,mEvents,person_id);
                         mRecyclerView.setAdapter(mEventInPersonAdapter);
                     }

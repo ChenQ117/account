@@ -1,5 +1,7 @@
 package Adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,10 @@ import Database.EventDao;
 import Database.Person;
 import Database.PersonDao;
 
+/**
+ * 用于加载某个人所参与的所有活动
+ * 每条活动布局为：name_layout
+ */
 public class EventInPersonAdapter extends RecyclerView.Adapter<EventInPersonAdapter.MyViewHoder> {
     List<Integer> eventIdList;
     List<Event> mEvents;
@@ -29,14 +35,15 @@ public class EventInPersonAdapter extends RecyclerView.Adapter<EventInPersonAdap
     ConnectionDao mConnectionDao;
     PersonDao mPersonDao;
     EventDao mEventDao;
-
+    Activity mActivity;
     int person_id;
 
-    public EventInPersonAdapter(ConnectionDao connectionDao, PersonDao personDao, EventDao eventDao,
+    public EventInPersonAdapter(Activity activity,ConnectionDao connectionDao, PersonDao personDao, EventDao eventDao,
                                 List<Integer> eventIdList,List<Event> mEvents,final int person_id) {
         mConnectionDao = connectionDao;
         mPersonDao = personDao;
         mEventDao = eventDao;
+        mActivity = activity;
         this.person_id = person_id;
         this.eventIdList = eventIdList;
         this.mEvents = mEvents;
@@ -55,16 +62,22 @@ public class EventInPersonAdapter extends RecyclerView.Adapter<EventInPersonAdap
     @Override
     public void onBindViewHolder(@NonNull final MyViewHoder holder, int position) {
         final Event event = mEvents.get(position);
-        final Person person = mPersonDao.findSinglePersonById(person_id);
         new Thread(new Runnable() {
             @Override
             public void run() {
+                final Person person = mPersonDao.findSinglePersonById(person_id);
                 final Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event.getId(),person_id);
-                holder.eventName.setText(event.getActivity());
-                holder.singleMoney.setText(""+connection.getSinglemoney());
-                if(connection.isPay()){
-                    holder.isPay.setChecked(true);
-                }
+                mActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.eventName.setText(event.getActivity());
+                        holder.singleMoney.setText(""+connection.getSinglemoney());
+                        if(connection.isPay()){
+                            holder.isPay.setChecked(true);
+                        }
+                    }
+                });
+
                 holder.isPay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -75,8 +88,13 @@ public class EventInPersonAdapter extends RecyclerView.Adapter<EventInPersonAdap
                             connection.setPay(false);
                             person.setMoney(person.getMoney()+connection.getSinglemoney());
                         }
-                        mConnectionDao.updateConnection(connection);
-                        mPersonDao.updatePerson(person);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mConnectionDao.updateConnection(connection);
+                                mPersonDao.updatePerson(person);
+                            }
+                        }).start();
                     }
                 });
             }

@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.account.R;
@@ -66,7 +67,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
             final Event event=allEvent.get(position);
             holder.eventName.setText(event.getActivity());
             holder.allMoney.setText(""+event.getAmount());
-            holder.eventName.setOnClickListener(new View.OnClickListener() {
+            holder.mCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, PersonDetail.class);
@@ -133,12 +134,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         TextView eventName;
         TextView allMoney;
         CheckBox mCheckBox;
+        CardView mCardView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName =itemView.findViewById(R.id.name);
             allMoney = itemView.findViewById(R.id.allMoney);
             mCheckBox = itemView.findViewById(R.id.isPay);
+            mCardView = itemView.findViewById(R.id.card_view);
         }
     }
 
