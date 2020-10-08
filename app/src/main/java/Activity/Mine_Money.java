@@ -13,9 +13,11 @@ import androidx.room.Room;
 import java.util.List;
 
 import Adapter.PersonAdapter;
+import Database.Connection;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
 import Database.ConnectionViewModel;
+import Database.Event;
 import Database.EventDao;
 import Database.EventDatabase;
 import Database.EventViewModel;
@@ -60,14 +62,7 @@ public class Mine_Money extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                personList = mPersonDao.findPerson();
-                mPersonAdapter = new PersonAdapter(mConnectionDao,mPersonDao,personList,Mine_Money.this);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRecyclerView.setAdapter(mPersonAdapter);
-                    }
-                });
+                setMyAdapter();
             }
         }).start();
     }
@@ -79,16 +74,35 @@ public class Mine_Money extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    personList = mPersonDao.findPerson();
-                    mPersonAdapter = new PersonAdapter(mConnectionDao,mPersonDao,personList,Mine_Money.this);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRecyclerView.setAdapter(mPersonAdapter);
-                        }
-                    });
+                    setMyAdapter();
                 }
             }).start();
         }
+    }
+
+    //删除钱款为0的人和活动为空的人
+    public void deleteNullPerson(){
+        List<Person> personList = mPersonDao.findPerson();
+        for (int i=0;i<personList.size();i++){
+            Person person = personList.get(i);
+            List<Integer> eventIdList = mConnectionDao.findEventIdByPersonId(person.getId());
+            List<Event> eventByEventId = mEventDao.findEventByEventId(eventIdList);
+            if (eventByEventId.isEmpty()||person.getMoney() == 0){
+                mPersonDao.deletePerson(person);
+            }
+        }
+    }
+
+    //设置适配器
+    public void setMyAdapter(){
+        deleteNullPerson();
+        personList = mPersonDao.findPerson();
+        mPersonAdapter = new PersonAdapter(mConnectionDao,mPersonDao,personList,Mine_Money.this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.setAdapter(mPersonAdapter);
+            }
+        });
     }
 }

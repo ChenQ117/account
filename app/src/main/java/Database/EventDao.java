@@ -22,6 +22,9 @@ public interface EventDao {
     @Query("SELECT * FROM EVENT_DATABASE ORDER BY ID")
     List<Event> getAllEvent();
 
+    @Query("SELECT id FROM EVENT_DATABASE")
+    List<Integer> getAllEventId();
+
     @Query("SELECT * FROM EVENT_DATABASE where id in(:eventId)")
     List<Event> findEventByEventId(List<Integer> eventId);
 

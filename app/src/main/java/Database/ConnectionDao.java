@@ -30,6 +30,13 @@ public interface ConnectionDao{
     void deleteConnectionByPersonId(int ... personid);
     @Query("SELECT person_Id FROM connection_database WHERE event_id IN (:eventid)")
     List<Integer> findPersonIdByEventId(int...eventid);
+
+    @Query("SELECT person_Id FROM connection_database WHERE event_id IN (:eventid)")
+    List<Integer> findPersonIdByEventId(List<Integer> eventid);
+
+    @Query("SELECT singlemoney FROM connection_database WHERE event_id IN (:eventid)")
+    List<Integer> findSingleMoneyByEventId(int  eventid);
+
     @Query("SELECT event_id FROM connection_database WHERE person_Id IN (:personid)")
     List<Integer> findEventIdByPersonId(int ... personid);
 

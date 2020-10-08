@@ -144,14 +144,7 @@ public class Item_Input extends AppCompatActivity {
                             }
 
                             for (int i = 0;i<personname.length;i++){
-                                /*if (personList.isEmpty()){
-                                    Person person = new Person(personname[i],0);
-                                    mPersonViewModel.insertPerson(person);
-                                    personList.add(person);
-                                    person_id++;
-                                    Connection connection = new Connection(event_id,person_id);
-                                    mConnectionViewModel.insertConnection(connection);
-                                }*/
+
                                 if (!personNameList.contains(personname[i])){
                                     Person person = new Person(personname[i],0);
                                     mPersonDao.insertPerson(person);

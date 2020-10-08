@@ -3,6 +3,7 @@ package com.example.account;
 import Activity.Item_Input;
 import Activity.Mine_Money;
 import Adapter.EventAdapter;
+import Database.Connection;
 import Database.ConnectionDao;
 import Database.ConnectionDatabase;
 import Database.ConnectionViewModel;
@@ -10,6 +11,7 @@ import Database.Event;
 import Database.EventDao;
 import Database.EventDatabase;
 import Database.EventViewModel;
+import Database.Person;
 import Database.PersonDao;
 import Database.PersonDatabase;
 import Database.PersonViewModel;
@@ -23,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -75,30 +76,9 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                events = mEventDao.getAllEvent();
-                mEventAdapter = new EventAdapter(events,MainActivity.this,mConnectionDao,mPersonDao);
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       mRecyclerView.setAdapter(mEventAdapter);
-                       /*mEventDao.getAllEventLive().observe(MainActivity.this, new Observer<List<Event>>() {
-                           @Override
-                           public void onChanged(List<Event> events) {
-                               int temp = mEventAdapter.getItemCount();
-                               mEventAdapter.setAllEvent(events);
-                               if(temp!= events.size()){
-                                   mEventAdapter.notifyDataSetChanged();
-                               }
-                           }
-                       });*/
-                   }
-               });
-
+                setMyAdapter();
             }
         }).start();
-
-
-
 
     }
 
@@ -109,18 +89,56 @@ public class MainActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    events = mEventDao.getAllEvent();
-                    mEventAdapter = new EventAdapter(events,MainActivity.this,mConnectionDao,mPersonDao);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRecyclerView.setAdapter(mEventAdapter);
-                        }
-                    });
+                    //先删除人名为空的活动即无效活动
+                    deleteNullEvent();
+                    setMyAdapter();
                 }
             }).start();
         }
     }
+
+    //剔除无效活动
+    public void deleteNullEvent(){
+        //先删除人名为空的活动即无效活动，再获得有效活动
+        List<Integer> eventIdList = mEventDao.getAllEventId();
+        for (int i=0;i<eventIdList.size();i++){
+            int temp_eventId = eventIdList.get(i);
+            List<Integer> personIdList = mConnectionDao.findPersonIdByEventId(temp_eventId);
+            List<Integer> singleMoneyList = mConnectionDao.findSingleMoneyByEventId(temp_eventId);
+            int numb = 0;
+
+
+            //查找与某个活动有关的所有人的单笔金额为0的个数，若全为0，则该活动为无效活动
+            for (int j = 0;j<singleMoneyList.size();j++){
+                if (singleMoneyList.get(i)==0){
+                    numb++;
+                }
+            }
+
+            //如果与某活动有关所有人已经不存在了，则该活动为无效活动
+            if (numb >= singleMoneyList.size()||personIdList.isEmpty()){
+                Event event_temp = mEventDao.findEventByEventId(temp_eventId);
+                mEventDao.deleteEvent(event_temp);
+            }
+
+        }
+    }
+
+    //设置适配器
+    public void setMyAdapter(){
+        //先删除人名为空的活动即无效活动
+        deleteNullEvent();
+
+        events = mEventDao.getAllEvent();
+        mEventAdapter = new EventAdapter(events,MainActivity.this,mConnectionDao,mPersonDao);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.setAdapter(mEventAdapter);
+            }
+        });
+    }
+
 
     public void onClickfab(View view){
         Intent intent = new Intent(this, Item_Input.class);

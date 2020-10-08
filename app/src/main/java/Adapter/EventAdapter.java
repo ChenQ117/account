@@ -55,7 +55,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
     }
 
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        //从文件中要把它加载这个view
         LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
         View itemview=layoutInflater.inflate(R.layout.list_layout,parent,false);
         return new MyViewHolder(itemview);
@@ -75,6 +74,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                     mContext.startActivity(intent);
                 }
             });
+
+            //如果该活动付清，则勾选
             if(event.isEmpty()){
                 holder.mCheckBox.setChecked(true);
             }

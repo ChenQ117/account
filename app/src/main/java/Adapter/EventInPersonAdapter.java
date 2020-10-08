@@ -82,11 +82,15 @@ public class EventInPersonAdapter extends RecyclerView.Adapter<EventInPersonAdap
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if(isChecked){
-                            connection.setPay(true);
-                            person.setMoney(person.getMoney()-connection.getSinglemoney());
+                            if (!connection.isPay()){
+                                connection.setPay(true);
+                                person.setMoney(person.getMoney()-connection.getSinglemoney());
+                            }
                         }else {
-                            connection.setPay(false);
-                            person.setMoney(person.getMoney()+connection.getSinglemoney());
+                            if (connection.isPay()){
+                                connection.setPay(false);
+                                person.setMoney(person.getMoney()+connection.getSinglemoney());
+                            }
                         }
                         new Thread(new Runnable() {
                             @Override
