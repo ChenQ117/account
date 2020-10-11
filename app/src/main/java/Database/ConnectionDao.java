@@ -24,10 +24,13 @@ public interface ConnectionDao{
     LiveData<List<Connection>> getAllConnectionLive();
     @Query("SELECT * FROM connection_database")
     List<Connection> getAllConnection();
+
     @Query("DELETE FROM connection_database WHERE event_id IN (:eventid)")
     void deleteConnectionByEventId(int...eventid);
     @Query("DELETE FROM connection_database WHERE person_Id IN (:personid)")
     void deleteConnectionByPersonId(int ... personid);
+
+
     @Query("SELECT person_Id FROM connection_database WHERE event_id IN (:eventid)")
     List<Integer> findPersonIdByEventId(int...eventid);
 

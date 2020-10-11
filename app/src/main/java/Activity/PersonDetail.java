@@ -112,13 +112,13 @@ public class PersonDetail extends AppCompatActivity {
                                     Person person_temp = mPersonDao.findSinglePersonById(temp_connection.getPersonId());
                                     if (person_temp !=null){
                                         person_temp.setMoney(person_temp.getMoney() - temp_connection.getSinglemoney());
-                                        if(person_temp.getMoney()==0) {
+                                        /*if(person_temp.getMoney()==0) {
                                             mPersonDao.deletePerson(person_temp);
-                                        }
+                                        }*/
                                     }
                                 }
                             }
-                            mConnectionDao.deleteConnection(connections);
+//                            mConnectionDao.deleteConnection(connections);
                         }
                     }).start();
                     PersonDetail.this.finish();
