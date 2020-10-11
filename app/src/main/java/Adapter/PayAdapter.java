@@ -20,10 +20,13 @@ import Database.Person;
 public class PayAdapter extends RecyclerView.Adapter<PayAdapter.MyViewHoder> {
     Map<CheckBox,EditText> mCheckBoxEditTextMap;
     List<Person> mPeople;
+    int allMoney;
+    int amoney;
 
-    public PayAdapter(Map<CheckBox, EditText> checkBoxEditTextMap, List<Person> people) {
+    public PayAdapter(Map<CheckBox, EditText> checkBoxEditTextMap, List<Person> people,int money) {
         mCheckBoxEditTextMap = checkBoxEditTextMap;
         mPeople = people;
+        allMoney = money;
     }
 
     @NonNull
@@ -39,11 +42,17 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.MyViewHoder> {
         Person person = mPeople.get(position);
         holder.mCheckBox.setText(person.getName());
         holder.mEditText.setVisibility(View.GONE);
+
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     holder.mEditText.setVisibility(View.VISIBLE);
+                    /*String moneys = holder.mEditText.getText().toString().trim();
+                    if(!"".equals(moneys)){
+                        amoney+=Integer.parseInt(moneys);
+                    }
+                    holder.mEditText.setHint(allMoney-amoney);*/
                 }else {
                     holder.mEditText.setVisibility(View.GONE);
                 }

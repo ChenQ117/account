@@ -92,7 +92,7 @@ public class Pay_Whom extends AppCompatActivity {
 
                 //获得参与这项活动的人的所有信息
                 person = mPersonDao.findPersonById(personList);
-                mPayAdapter = new PayAdapter(mCheckBoxEditTextMap,person);
+                mPayAdapter = new PayAdapter(mCheckBoxEditTextMap,person,allMoney);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
