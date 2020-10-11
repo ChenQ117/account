@@ -121,7 +121,7 @@ public class Item_Input extends AppCompatActivity {
                             public void run() {
 
                                 int count = Integer.parseInt(counts);
-                                int money = Integer.parseInt(moneys);
+                                final int money = Integer.parseInt(moneys);
                                 Event event = new Event(activityname,count,money );
                                 mEventDao.insertEvent(event);
 
@@ -171,6 +171,7 @@ public class Item_Input extends AppCompatActivity {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Intent intent = new Intent(v.getContext(),Pay_Whom.class);
                                                 intent.putExtra("event_id",event_id);
+                                                intent.putExtra("allMoney",money);
                                                 startActivity(intent);
                                             }
                                         });
@@ -179,6 +180,7 @@ public class Item_Input extends AppCompatActivity {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Intent intent = new Intent(v.getContext(),Who_Pay.class);
                                                 intent.putExtra("event_id",event_id);
+                                                intent.putExtra("allMoney",money);
                                                 startActivity(intent);
                                             }
                                         });

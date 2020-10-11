@@ -1,5 +1,6 @@
 package Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.account.R;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,6 +54,7 @@ public class Who_Pay extends AppCompatActivity {
     List<Person> person;//参加活动的人
     Map<CheckBox,EditText> mCheckBoxEditTextMap = new HashMap<>();
     int event_id;
+    int allMoney = 0;//总金额
     CheckBox cb;
 
     boolean flag_btnext = false;
@@ -78,6 +81,7 @@ public class Who_Pay extends AppCompatActivity {
 
         Intent intent = getIntent();
         event_id = intent.getIntExtra("event_id",0);
+        allMoney = intent.getIntExtra("allMoney",0);
 
         new Thread(new Runnable() {
             @Override
@@ -105,18 +109,20 @@ public class Who_Pay extends AppCompatActivity {
                 public void onClick(View v) {
                     Set<CheckBox> checkBoxes = mCheckBoxEditTextMap.keySet();
                     int flag = 0;//用于判断金额是否填写不合理
+                    int amoney = 0;//用于判断总金额是否正确
                     for(final CheckBox checkBox: checkBoxes){
                         if(checkBox.isChecked()){
-
+//                            mCheckBoxEditTextMap.get(checkBox).setHint(allMoney-amoney);
                             final String moneys = mCheckBoxEditTextMap.get(checkBox).getText().toString().trim();
                             if("".equals(moneys)){
                                 flag = 1;
                                 Toast.makeText(v.getContext(),"金额填写错误",Toast.LENGTH_SHORT).show();
                             }else {
+                                final int money = Integer.parseInt(moneys);
+                                amoney+=money;
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        int money = Integer.parseInt(moneys);
                                         Person person = mPersonDao.findPersonMoney(checkBox.getText().toString().trim());
                                         Connection connection = mConnectionDao.findConnectionByEventIdAndPersonId(event_id,person.getId());
                                         connection.setSinglemoney(money);
@@ -128,7 +134,25 @@ public class Who_Pay extends AppCompatActivity {
                             }
                         }
                     }
-                    if(flag == 0){
+                    if (amoney!=allMoney&&flag == 0){
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(Who_Pay.this);
+                        builder.setTitle("金额填写不合理，是否继续提交？");
+                        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(Who_Pay.this,"添加成功",Toast.LENGTH_SHORT).show();
+                                ActivityCollector.finishAll();
+                            }
+                        });
+                        builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        builder.show();
+                        //flag = 1;
+                        Toast.makeText(v.getContext(),"金额填写不合理",Toast.LENGTH_SHORT).show();
+                    } else if(flag == 0){
                         Toast.makeText(Who_Pay.this,"添加成功",Toast.LENGTH_SHORT).show();
                         ActivityCollector.finishAll();
                     }

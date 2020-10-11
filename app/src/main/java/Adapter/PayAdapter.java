@@ -38,14 +38,14 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.MyViewHoder> {
     public void onBindViewHolder(@NonNull final MyViewHoder holder, int position) {
         Person person = mPeople.get(position);
         holder.mCheckBox.setText(person.getName());
-        holder.mEditText.setVisibility(View.INVISIBLE);
+        holder.mEditText.setVisibility(View.GONE);
         holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     holder.mEditText.setVisibility(View.VISIBLE);
                 }else {
-                    holder.mEditText.setVisibility(View.INVISIBLE);
+                    holder.mEditText.setVisibility(View.GONE);
                 }
             }
         });

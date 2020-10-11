@@ -100,6 +100,11 @@ public class Mine_Money extends AppCompatActivity {
             if (numIsPay == isPayList.size()){
                 person.setPay(true);
                 mPersonDao.updatePerson(person);
+            }else {
+                if (person.isPay()){
+                    person.setPay(false);
+                    mPersonDao.updatePerson(person);
+                }
             }
 //            ||(person.getMoney() == 0&&!person.isPay())
             if (eventByEventId.isEmpty()){

@@ -121,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
             List<Integer> personIdList = mConnectionDao.findPersonIdByEventId(temp_eventId);
             List<Integer> singleMoneyList = mConnectionDao.findSingleMoneyByEventId(temp_eventId);
             List<Boolean> isPayList = mConnectionDao.findIsPayByEventId(temp_eventId);
+
+            Event event_temp = mEventDao.findEventByEventId(temp_eventId);
+
             int numbSingleMaoney = 0;
             int numbisPay =0;
 
@@ -138,13 +141,17 @@ public class MainActivity extends AppCompatActivity {
 
             //查找与某个活动有关的所有人的单笔金额是否付清，若付清，则该活动被付清
             if (numbisPay == isPayList.size()){
-                Event event_temp = mEventDao.findEventByEventId(temp_eventId);
+                event_temp.setEmpty(true);
                 mEventDao.updateEvent(event_temp);
+            }else {
+                if (event_temp.isEmpty()){
+                    event_temp.setEmpty(false);
+                    mEventDao.updateEvent(event_temp);
+                }
             }
 
             //如果与某活动有关所有人已经不存在了，则该活动为无效活动
             if (numbSingleMaoney >= singleMoneyList.size()||personIdList.isEmpty()){
-                Event event_temp = mEventDao.findEventByEventId(temp_eventId);
                 mEventDao.deleteEvent(event_temp);
             }
 
