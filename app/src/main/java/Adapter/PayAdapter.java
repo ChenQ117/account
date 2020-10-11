@@ -1,11 +1,13 @@
 package Adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,13 +50,27 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.MyViewHoder> {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     holder.mEditText.setVisibility(View.VISIBLE);
-                    /*String moneys = holder.mEditText.getText().toString().trim();
-                    if(!"".equals(moneys)){
-                        amoney+=Integer.parseInt(moneys);
-                    }
-                    holder.mEditText.setHint(allMoney-amoney);*/
                 }else {
                     holder.mEditText.setVisibility(View.GONE);
+                }
+            }
+        });
+        holder.mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                final String moneys = holder.mEditText.getText().toString().trim();
+                holder.mEditText.setHint(String.valueOf(allMoney-amoney));
+                int x = 0;
+                if(!"".equals(moneys)){
+                    x = Integer.parseInt(moneys);
+                }
+                if(hasFocus){
+                    amoney -= x;
+                }else {
+                    amoney += x;
+                    if(amoney>allMoney){
+                        Toast.makeText(v.getContext(),"金额错误",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
